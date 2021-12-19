@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>首页</title>
-<%- include('bt') %>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<%-include('bt.ejs')%>
 </head>
 <body style="background:url(photo/bg.jpg);background-repeat:no-repeat;backgroung-attachment:fixed">
-	<%- include('nav') %>
-	<div class="container">
-		<div class="row" style="margin-top: 10px">
-			<%- include('lf') %>
-			<div class="col-lg-6">
-				<div class="jumbotron">
-					<h1 class="display-4">开源软件期末大作业</h1>
-					<p class="lead">190110910508 胡孟帆 19计算机2班</p>
-					<hr class="my-4">
-					<p>主要功能:</p>
-					<p>1.</p>
-					<a class="btn btn-primary btn-lg"
-						href="http://localhost:5508/login.ejs" role="button">去登陆</a>
+	<%-include('nav.ejs')%>
+		<div class="container">
+			<div class="row" style="margin-top: 10px">
+				<%-include('lf.ejs')%>
+				<div class="col-lg-6">
+					<div class="jumbotron">
+						<h1 class="display-4">开源软件期末大作业</h1>
+						<p class="lead">190110910508 胡孟帆 19计算机2班</p>
+						<hr class="my-4">
+						<p>主要功能:</p>
+						<p>1.</p>
+						<a class="btn btn-primary btn-lg"
+							href="http://localhost:5508/login.ejs" role="button">去登陆</a>
+					</div>
 				</div>
+				<%-include('lr.ejs')%>
 			</div>
-			<%- include('lr') %>
 		</div>
-	</div>
-<%- include('bottom') %>
-
-</body>
+		<%-include('bottom.ejs')%>
+	</body>
 </html>

@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>首页</title>
+<script src="bootstrap-4.4.1-dist/jquery-3.0.0.min.js"></script>
+<script src="bootstrap-4.4.1-dist/popper.minjs"></script>
+<script src="bootstrap-4.4.1-dist/js/bootstrap.js"></script>
+<%- include("bt") %>
+</head>
+<body style="background:url(photo/bg.jpg);background-repeat:no-repeat;backgroung-attachment:fixed">
+<%@ include file="nav.ejs" %>
+	<div class="container">
+		<div class="row" style="margin-top: 10px">
+			<%@ include file="lf.ejs" %>
+			<div class="col-lg-6">
+				<div class="jumbotron">
+					<h1 class="display-4">开源软件期末大作业</h1>
+					<p class="lead">190110910508 胡孟帆 19计算机2班</p>
+					<hr class="my-4">
+					<p>主要功能:</p>
+					<p>1.</p>
+					<a class="btn btn-primary btn-lg"
+						href="http://localhost:5508/login.ejs" role="button">去登陆</a>
+				</div>
+			</div>
+			<%@ include file="lr.ejs" %>
+		</div>
+	</div>
+<%@ include file="bottom.ejs"%>
+
+</body>
+</html>

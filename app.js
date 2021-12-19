@@ -1,35 +1,32 @@
 const http = require('http');
-const fs = require('fs')
-const ejs = require('ejs')
+const fs = require('fs');
+const ejs = require('ejs');
+const express = require('express');
+const app = express()
+const port = 5508
 
-const server = http.createServer((req, res) => {
-    res.statusCode = 200;
+// 配置模板引擎
+app.set("view engine","ejs")
+app.use(express.static("node_modules"));
 
-    if(req.url.endsWith('/favicon.ico'))
-    {
-        res.setHeader('Content-Type', 'image/jpg');
-        fs.readFile('icon.jpg', function (err, data) {
-            if(err) console.error(err);
-            res.write(data);
-            res.end();
-        });
-    }
-    else if(req.url == '/')
-    {
-        res.setHeader('Content-Type', 'text/html');
-        // var data = fs.readFileSync('20210923/index.html');
-        // res.write(data);
-        fs.readFile('./views/index.ejs', function (err, data) {
-            if (err) return console.error(err);
-            //console.log(data.toString());
-            res.write(data);
-            res.end();
-        });
-    }
-    else{
-        res.setHeader('Content-Type', 'text/html');
-        res.end('input received!')
-    }
-    
-});
-server.listen(5508);
+app.get('/',(req, res)=>{
+    // ejs.renderFile('index', {result:10}, function(err, str){
+    //     // str => 输出渲染后的 HTML 字符串
+    //     if(err){console.log('File is error.')}
+    //     else
+    //     {
+    //         res.setHeader('Content-Type', 'text/html');
+    //         res.end(str);
+    //     }
+    // });
+
+    res.render('index.ejs', {
+
+    })
+
+    // res.send("年号s")
+})
+
+app.listen(port, () => {
+    console.log(`Example app listening at http://localhost:${port}`)
+})
