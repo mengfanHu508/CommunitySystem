@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>vip界面</title>
+<%-include('bt.ejs')%>
+</head>
+<body style="background: url(photo/bg.jpg)">
+	<%-include('nav.ejs')%>
+	<div class="container" style="background: #FFF">
+		<div
+			class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+			<h1 class="display-4">超级拉姆</h1>
+			<h2 style="color: red">${info}</h2>
+			<p class="lead">总体来看，摩尔庄园手游打算走小花仙的老路，非常逼氪。虽然扭蛋里面都是一些装扮，但是逼氪的味道已经满满当当了。不充钱可以玩，但是很难像童年那样愉快地玩耍。</p>
+		</div>
+		<div class="container">
+			<div class="card-deck mb-3 text-center">
+				<div class="card mb-4 shadow-sm">
+					<div class="card-header">
+						<h4 class="my-0 font-weight-normal">Free</h4>
+					</div>
+					<div class="card-body">
+						<h1 class="card-title pricing-card-title">
+							0RMB <small class="text-muted">/ Day</small>
+						</h1>
+						<ul class="list-unstyled mt-3 mb-4">
+							<li>无特权</li>
+							<li>无特权</li>
+							<li>无特权</li>
+							<li>无特权</li>
+						</ul>
+						<a type="button" class="btn btn-lg btn-block btn-outline-primary"
+							href="index.jsp">穷比买不起</a>
+					</div>
+				</div>
+				<div class="card mb-4 shadow-sm">
+					<div class="card-header">
+						<h4 class="my-0 font-weight-normal">月费超级拉姆</h4>
+					</div>
+					<div class="card-body">
+						<h1 class="card-title pricing-card-title">
+							15RMB <small class="text-muted">/ Month</small>
+						</h1>
+						<ul class="list-unstyled mt-3 mb-4">
+							<li>1、每周领摩尔豆</li>
+							<li>2、每月独享豪华超级道具</li>
+							<li>3、获得神奇道具</li>
+							<li>4、随时召唤超级拉姆</li>
+						</ul>
+						<a type="button" class="btn btn-lg btn-block btn-primary"
+							href="ChangeStatus?molename=${molename}">整个好活？</a>
+					</div>
+				</div>
+				<div class="card mb-4 shadow-sm">
+					<div class="card-header">
+						<h4 class="my-0 font-weight-normal">年费超级拉姆</h4>
+					</div>
+					<div class="card-body">
+						<h1 class="card-title pricing-card-title">
+							120RMB <small class="text-muted">/ Year</small>
+						</h1>
+						<ul class="list-unstyled mt-3 mb-4">
+							<li>1.月费有的我都有</li>
+							<li>2、显示超级拉姆标识</li>
+							<li>3、能学习魔法变身</li>
+							<li>4、帅就完了</li>
+						</ul>
+						<a type="button" class="btn btn-lg btn-block btn-primary"
+							href="ChangeStatus?molename=${molename}">冲冲冲！</a>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+
+	<%-include('bottom.ejs')%>
+
+
+</body>
+</html>

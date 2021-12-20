@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>好友列表</title>
+<%-include('bt.ejs')%>
+</head>
+<body style="background: url(photo/bg.jpg)">
+	<%-include('nav.ejs')%>
+	<div class="container">
+		<div class="row" style="margin-top: 10px">
+			<%-include('lf.ejs')%>
+			<div class="col-lg-9">
+				<div class="card">
+					<div class="card-header">好友列表</div>
+					<div class="card-body">
+						<div>
+							<table class="table">
+								<thead> 
+									<tr>
+										<th scope="col" width="30%">个人头像</th>
+										<th scope="col" width="30%">用户名</th>
+										<th scope="col" >用户操作</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${friendList}" var="friend" varStatus="i">
+										<tr>
+											<td>
+												<img src="/photos/${friend.photo} " height=75px>
+											</td>
+											<td>${friend.friend}</td>
+											<td><a type="button" class="btn btn-success"
+												href="UserInfo?molename=${friend.friend}">详细信息</a>
+											<a type="button" class="btn btn-primary" href="ChartList?friendname=${friend.friend}">私聊</a>
+											<a type="button" class="btn btn-danger"
+												href="DeleteFriend?friendname=${friend.friend}">删除好友</a></td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<nav aria-label="Page navigation example" style="margin-top: 20px">
+						<ul class="pagination justify-content-center">
+							<c:if test="${page==1}">
+								<li class="page-item disabled"><a class="page-link"
+									href="#"> 上一页</a></li>
+							</c:if>
+							<c:if test="${page!=1}">
+								<li class="page-item"><a class="page-link"
+									href="AllFriend?page=${page-1}"> 上一页</a></li>
+
+							</c:if>
+							<li class="page-item"><a class="page-link"
+								href="AllFriend?page=${page}"> ${page}</a></li>
+							<c:if test="${page!=mostpage}">
+								<li class="page-item"><a class="page-link"
+									href="AllFriend?page=${page+1}"> 下一页</a></li>
+							</c:if>
+							<c:if test="${page==mostpage}">
+								<li class="page-item disabled"><a class="page-link"
+									href="#"> 下一页</a></li>
+
+							</c:if>
+						</ul>
+					</nav>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div>
+			<br></br> <br></br> <br></br> <br></br>
+		</div>
+	</div>
+	<%-include('bottom.ejs')%>
+
+
+</body>
+</html>

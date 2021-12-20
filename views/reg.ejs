@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>用户注册</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<%-include('bt.ejs')%>
+</head>
+<body style="background: url(photo/bg1.jpg);background-repeat:no-repeat;backgroung-attachment:fixed">
+<%-include('nav.ejs')%>
+	<div class="container-fluid">
+		<div class="container">
+			<div class="row" style="margin-top: 50px">
+				<div class="col"></div>
+				<div class="col-6">
+					<div class="card">
+						<div class="card-header">用户注册</div>
+						<div class="card-body">
+							<p style="color: red"></p>
+							<form method="post" action="/RegAction"
+								enctype="multipart/form-data">
+
+								<div class="form-group row">
+									<label for="inputEmail3" class="col-sm-3 col-form-label">摩尔号</label>
+									<div class="col-sm-6">
+										<input type="text" name="moleid" class="form-control"
+											id="inputEmail3" placeholder="长度为 8 的数字" required="required">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputEmail3" class="col-sm-3 col-form-label">用户名</label>
+									<div class="col-sm-6">
+										<input type="text" name="molename" class="form-control"
+											id="inputEmail3" placeholder="用户名" required="required">
+									</div>
+								</div>
+
+
+								<div class="form-group row">
+									<label for="inputPassword3" class="col-sm-3 col-form-label">密码</label>
+									<div class="col-sm-6">
+										<input type="password" name="password" class="form-control"
+											id="inputPassword3" placeholder="密码" required="required">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputPassword3" class="col-sm-3 col-form-label">性别</label>
+									<div class="col-sm-1">
+										<div class="form-check form-check-inline">
+
+											<input class="form-check-input" type="radio" name="sex"
+												value="男" id="sex1" checked> <label
+												class="form-check-label" for="sex1">男</label>
+
+										</div>
+									</div>
+									<div class="col-sm-1">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="sex"
+												id="sex2" value="女"> <label class="form-check-label"
+												for="sex2">女</label>
+
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputPassword3" class="col-sm-3 col-form-label">出生年月</label>
+									<div class="col-sm-6">
+										<input type="date" name="birth" class="form-control"
+											id="inputPassword3" placeholder="生日" value="1980-01-01">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputPassword3" class="col-sm-3 col-form-label">地区</label>
+									<div class="col-sm-6">
+										<select class="form-control" name="region">
+											<option value="摩尔城堡">摩尔城堡</option>
+											<option value="开心农场">开心农场</option>
+											<option value="淘淘乐街">淘淘乐街</option>
+											<option value="阳光牧场">阳光牧场</option>
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputPassword3" class="col-sm-3 col-form-label">特产</label>
+									<div class="col-sm-2">
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" name="spec"
+												class="custom-control-input" id="customCheck1" value="锦鲤">
+											<label class="custom-control-label" for="customCheck1">锦鲤</label>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" name="spec"
+												class="custom-control-input" id="customCheck4" value="金鱼">
+											<label class="custom-control-label" for="customCheck4">金鱼</label>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" name="spec"
+												class="custom-control-input" id="customCheck2" value="桃子">
+											<label class="custom-control-label" for="customCheck2">桃子</label>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="custom-control custom-checkbox">
+											<input type="checkbox" name="spec"
+												class="custom-control-input" id="customCheck3" value="草莓">
+											<label class="custom-control-label" for="customCheck3">草莓</label>
+										</div>
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">个人头像</label>
+									<div class="col-sm-3">
+										<input type="file" name="headimg" accept="image/gif,image/jpeg">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label for="inputPassword3" class="col-sm-3 col-form-label">是否管理员</label>
+									<div class="col-sm-1">
+										<div class="form-check form-check-inline">
+
+											<input class="form-check-input" type="radio" name="manager"
+												value="是" id="manager1" checked> <label
+												class="form-check-label" for="manager1">是</label>
+
+										</div>
+									</div>
+									<div class="col-sm-1">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="manager"
+												id="manager2" value="否"> <label class="form-check-label"
+												for="manager2">否</label>
+
+										</div>
+									</div>
+								</div>
+
+
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<button type="submit" class="btn btn-primary btn-lg btn-block">注册</button>
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+
+				</div>
+				<div class="col"></div>
+
+			</div>
+			<br>
+			<br>
+		</div>
+	</div>
+
+<%-include('bottom.ejs')%>
+</body>
+</html>

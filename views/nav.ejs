@@ -1,6 +1,5 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<a class="navbar-brand" href="#">${title}</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse"
 		data-target="#navbarSupportedContent"
 		aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -14,17 +13,29 @@
 			</a></li>
 			<li class="navbar-text"><a class="nav-link"
 				href="https://mole.leiting.com/home">官网首页</a></li>
-			<li class="navbar-text dropdown"><a
-				class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false">${molename==null?"未登录":molename}</a> <c:if
+			<li class="navbar-text dropdown">
+				<%  if (user != null) { %> 
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+					role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false">
+					<%= user.molename %>	
+					</a> 
+				<% } %>
+				<%  if (user == null) { %> 
+					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
+					role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false">
+					未登录	
+					</a> 
+				<% } %>
+				<c:if
 					test="${molename!=null}">
 					<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-						<a class="dropdown-item" href="Myinfo">我的信息</a> 
-						<a class="dropdown-item" href="MyMessage?page=1">我的消息</a>
-						<a class="dropdown-item" href="vip.jsp">我的会员</a>
-						<a class="dropdown-item" href="AllFriend?page=1">我的好友</a>
-						<a class="dropdown-item" href="setpwd.jsp">修改密码</a>
+						<a class="dropdown-item" href="userinfo.ejs">我的信息</a> 
+						<a class="dropdown-item" href="mymessage.ejs">我的消息</a>
+						<a class="dropdown-item" href="vip.ejs">我的会员</a>
+						<a class="dropdown-item" href="friendlist.ejs">我的好友</a>
+						<a class="dropdown-item" href="setpwd.ejs">修改密码</a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="Logout">注销</a>
 					</div>

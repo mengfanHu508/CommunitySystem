@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>我的消息</title>
+<%-include('bt.ejs')%>
+</head>
+<body style="background: url(photo/bg.jpg)">
+	<%-include('nav.ejs')%>
+	<div class="container">
+		<div class="row" style="margin-top: 10px">
+			<%-include('lf.ejs')%>
+			<div class="col-lg-9">
+				<div class="card">
+					<div class="card-header">消息列表</div>
+					<div class="card-body">
+
+						<div>
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col">头像</th>
+										<th scope="col">用户名</th>
+										<th scope="col">消息内容</th>
+										<th scope="col">操作选择</th>
+										<th scope="col" width="20%">发送时间</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${MessageList}" var="message" varStatus="i">
+										<c:if test="${message.message == '请求加你为好友'}">
+											<tr>
+													<td><img src="/photos/${message.photo}" height=75px></td>
+													<td><a href="UserInfo?molename=${message.friendname}">${message.friendname}</a></td>
+													<td>${message.message}
+													
+													<p><span style="color:red" id="c1${i.count}"></span></p>
+													<p><span style="color:red" id="c2${i.count}"></span></p>
+													</td>
+													
+													<td>
+													<a type="button" class="btn btn-success" id = "btn1${i.count}">接受</a>
+													<script>
+													var btn = document.getElementById("btn1${i.count}")
+													
+													btn.onclick = function(){
+														
+														//     1.url   2.成功后的回调函数
+														$.get("AddFriend",{friendname:'${message.friendname}'},function(data){
+															//从后台拿到最新数据
+															var c1 = document.getElementById("c1${i.count}")
+															c1.innerHTML = data;
+															
+														});
+													}
+													</script>	
+														
+													
+													<a type="button" class="btn btn-danger" id = "btn2${i.count}">删除信息</a>
+													<script>
+													var btn = document.getElementById("btn2${i.count}")
+													
+													btn.onclick = function(){
+														
+														//     1.url   2.成功后的回调函数
+														$.get("DeleteMessage",{friendname:'${message.friendname}'},function(data){
+															//从后台拿到最新数据
+															var c2 = document.getElementById("c2${i.count}")
+															c2.innerHTML = data;
+															
+														});
+													}
+													</script>	
+													</td>	
+													<td>${message.sendtime}</td>
+											</tr>
+										</c:if>
+									</c:forEach>
+									
+									
+								</tbody>
+									
+							</table>
+						</div>
+					</div>
+					<nav aria-label="Page navigation example" style="margin-top: 20px">
+						<ul class="pagination justify-content-center">
+							<c:if test="${page==1}">
+								<li class="page-item disabled"><a class="page-link"
+									href="#"> 上一页</a></li>
+							</c:if>
+							<c:if test="${page!=1}">
+								<li class="page-item"><a class="page-link"
+									href="MyMessage?page=${page-1}"> 上一页</a></li>
+
+							</c:if>
+							<li class="page-item"><a class="page-link"
+								href="MyMessage?page=${page}"> ${page}</a></li>
+							<c:if test="${page!=mostpage}">
+								<li class="page-item"><a class="page-link"
+									href="MyMessage?page=${page+1}"> 下一页</a></li>
+							</c:if>
+							<c:if test="${page==mostpage}">
+								<li class="page-item disabled"><a class="page-link"
+									href="#"> 下一页</a></li>
+
+							</c:if>
+						</ul>
+					</nav>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<div class="col-lg-6">
+	<div>
+		<br></br>
+		<br></br>
+		<br></br>
+		<br></br>
+	</div>
+	</div>
+	<%-include('bottom.ejs')%>
+
+
+</body>
+</html>

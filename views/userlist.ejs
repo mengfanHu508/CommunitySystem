@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>用户列表</title>
+<%-include('bt.ejs')%>
+</head>
+<body style="background: url(photo/bg.jpg)">
+	<%-include('nav.ejs')%>
+	<div class="container">
+		<div class="row" style="margin-top: 10px">
+			<%-include('lf.ejs')%>
+			<div class="col-lg-9">
+				<div class="card">
+					<div class="card-header">
+						用户列表
+						<p style="text-align: center">
+							<span style="color: red" id="c1"></span>
+						</p>
+					</div>
+					<div class="card-body">
+
+						<div>
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col">头像</th>
+										<th scope="col">用户名</th>
+										<th scope="col">性别</th>
+										<th scope="col">出生年月</th>
+										<th scope="col">地区</th>
+										<th scope="col">用户状态</th>
+									</tr>
+								</thead>
+								<tbody>
+
+									<c:forEach items="${userList}" var="user" varStatus="i">
+										<tr>
+											<td><img src="/photos/${user.photo}" height=75px></td>
+											<c:if test="${user.status==true}">
+												<td>${user.molename}<span class="badge badge-danger">VIP</span></td>
+											</c:if>
+											<c:if test="${user.status!=true}">
+												<td>${user.molename}</td>
+											</c:if>
+											<td>${user.sex}</td>
+											<td>${user.birthCn}</td>
+											<td>${user.region}</td>
+
+											<c:if test="${user.status==true}">
+												<td style="color: red">${user.statusCn}</td>
+												<td><a type="button" class="btn btn-success"
+													href="UserInfo?molename=${user.molename}">详情</a></td>
+											</c:if>
+											<c:if test="${user.status!=true}">
+												<td>${user.statusCn}</td>
+												<td><a type="button" class="btn btn-success"
+													href="UserInfo?molename=${user.molename}">详情</a></td>
+											</c:if>
+											<td><a type="button" class="btn btn-primary"
+												id="btn${i.count}">加为好友</a> <script>
+													var btn = document.getElementById("btn${i.count}")
+													btn.onclick = function() {
+														//     1.url   2.成功后的回调函数
+														$.get("AddMessage",{friendname : '${user.molename}',message: '请求加你为好友'},function(data) {
+															//从后台拿到最新数据
+															var c1 = document.getElementById("c1")
+															c1.innerHTML = data;
+															});
+													}
+												</script></td>
+											<td>
+										</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<nav aria-label="Page navigation example" style="margin-top: 20px">
+						<ul class="pagination justify-content-center">
+							<c:if test="${page==1}">
+								<li class="page-item disabled"><a class="page-link"
+									href="#"> 上一页</a></li>
+							</c:if>
+							<c:if test="${page!=1}">
+								<li class="page-item"><a class="page-link"
+									href="AllUser?page=${page-1}"> 上一页</a></li>
+
+							</c:if>
+							<li class="page-item"><a class="page-link"
+								href="AllUser?page=${page}"> ${page}</a></li>
+							<c:if test="${page!=mostpage}">
+								<li class="page-item"><a class="page-link"
+									href="AllUser?page=${page+1}"> 下一页</a></li>
+							</c:if>
+							<c:if test="${page==mostpage}">
+								<li class="page-item disabled"><a class="page-link"
+									href="#"> 下一页</a></li>
+
+							</c:if>
+
+						</ul>
+					</nav>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<%-include('bottom.ejs')%>
+
+
+</body>
+</html>

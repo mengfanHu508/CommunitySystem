@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>植物信息</title>
+<%-include('bt.ejs')%>
+</head>
+<body style="background:url(photo/bg.jpg)">
+	<%-include('nav.ejs')%>
+	<div class="container">
+		<!-- 内容  -->
+		<div class="row" style="margin-top: 10px">
+			<%-include('lf.ejs')%>
+			<div class="col-lg-9">
+				<div class="card">
+					<div class="card-header">植物信息</div>
+					<div class="card-body">
+
+						<div>
+							<h2>植物信息：</h2>
+							<div class = "row">
+							<div class = "col-lg-8">
+								</div>
+								<div class = "col-lg-8">
+									<p>植物名称:${plant.plantname}</p>
+									<p>成本价格:${plant.cost}</p>
+									<p>商人售价:${plant.saleprice}</p>
+									<p>成长时间:${plant.growtime}</p>
+									<p>获得途径:${plant.access}</p>
+									<p>稀有度:${plant.rarity}</p>
+									<p>图像:<img src="/photos/${plant.photo}" height=200px></p>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<%-include('bottom.ejs')%>
+
+</body>
+</html>
