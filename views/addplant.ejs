@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>添加植物图鉴信息</title>
+<%-include('bt.ejs')%>
+</head>
+<body style="background:url(photo/bg.jpg);background-repeat:no-repeat;backgroung-attachment:fixed">
+	<%-include('nav.ejs')%>
+	<div class="container">
+		<div class="row" style="margin-top: 10px">
+			<%-include('lf.ejs')%>
+			<div class="col-6">
+					<div class="card">
+						<div class="card-header">添加植物图鉴</div>
+						<div class="card-body">
+							<p style="color: red"></p>
+							<form method="post" action="/AddPlant" enctype="multipart/form-data">
+
+								<div class="form-group row">
+									<label  class="col-sm-3 col-form-label">植物名称</label>
+									<div class="col-sm-6">
+										<input type="text" name="plantname" class="form-control"
+											 placeholder="植物名称" required="required">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label  class="col-sm-3 col-form-label">花费</label>
+									<div class="col-sm-6">
+										<input type="text" name="cost" class="form-control"
+											 placeholder="花费" required="required">
+									</div>
+								</div>
+
+
+								<div class="form-group row">
+									<label  class="col-sm-3 col-form-label">商店售价</label>
+									<div class="col-sm-6">
+										<input type="text" name="saleprice" class="form-control"	
+										 placeholder="商店售价" required="required">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<label  class="col-sm-3 col-form-label">成长时间</label>
+									<div class="col-sm-6">
+										<input type="text" name="growtime" class="form-control"
+											 placeholder="成长时间" required="required">
+									</div>
+								</div>
+								
+								<div class="form-group row">
+									<label  class="col-sm-3 col-form-label">获取途径</label>
+									<div class="col-sm-6">
+										<input type="text" name="access" class="form-control"
+											 placeholder="获取途径" required="required">
+									</div>
+								</div>
+
+
+								<div class="form-group row">
+									<label  class="col-sm-3 col-form-label">稀有度</label>
+									<div class="col-sm-1">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="rarity"
+												value="1星" checked> <label class="form-check-label">1</label>
+
+										</div>
+									</div>
+									<div class="col-sm-1">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="rarity"
+												value="2星" checked> <label class="form-check-label">2</label>
+
+										</div>
+									</div>
+									<div class="col-sm-1">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="rarity"
+												value="3星" checked> <label class="form-check-label">3</label>
+
+										</div>
+									</div>
+									<div class="col-sm-1">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="rarity"
+												value="4星" checked> <label class="form-check-label">4</label>
+
+										</div>
+									</div>
+									<div class="col-sm-1">
+										<div class="form-check form-check-inline">
+											<input class="form-check-input" type="radio" name="rarity"
+												value="5星" checked> <label class="form-check-label">5</label>
+
+										</div>
+									</div>
+
+								</div>
+
+
+								<div class="form-group row">
+									<label class="col-sm-3 col-form-label">植物图像</label>
+									<div class="col-sm-3">
+										<input type="file" name="photo" accept="image/gif,image/jpeg,image/png">
+									</div>
+								</div>
+
+
+								<div class="form-group row">
+									<div class="col-sm-12">
+										<button type="submit" class="btn btn-primary btn-lg btn-block">添加植物图鉴</button>
+									</div>
+								</div>
+
+							</form>
+						</div>
+					</div>
+
+				</div>
+			<%-include('lr.ejs')%>
+		</div>
+	</div>
+<%-include('bottom.ejs')%>
+
+</body>
+</html>

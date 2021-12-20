@@ -152,10 +152,10 @@ app.get('/AddMessage',(req, res)=>{
 })
 
 //我的消息页面
-app.get('/mamessage.ejs',(req, res)=>{
-
-    res.render('mamessage.ejs', {
-        user:null,
+app.get('/mymessage.ejs',(req, res)=>{
+    var user = req.session.user
+    res.render('mymessage.ejs', {
+        user:user,
         info:null
     })
 
@@ -163,9 +163,9 @@ app.get('/mamessage.ejs',(req, res)=>{
 
 //好友列表页面
 app.get('/friendlist.ejs',(req, res)=>{
-
+    var user = req.session.user
     res.render('friendlist.ejs', {
-        user:null,
+        user:user,
         info:null
     })
 
@@ -179,6 +179,7 @@ app.get('/userinfo',(req, res)=>{
     var molename = key[0].split('=')[1];
     console.log(molename)
     Mongoose.User.findOne({"molename": molename}).exec((err, user) => {
+        if(err) return console.log(err)
         res.render('userinfo.ejs', {
             user:user
         })
@@ -203,51 +204,97 @@ app.get('/userlist.ejs',(req, res)=>{
     })
 })
 
-//菜品图鉴页面
-app.get('/food.ejs',(req, res)=>{
-
-    res.render('food.ejs', {
-        user:null,
-        info:null
-    })
-
-})
-
-//菜品信息页面
-app.get('/foodinfo.ejs',(req, res)=>{
-
-    res.render('foodinfo.ejs', {
-        user:null,
-        info:null
-    })
-
-})
-
 //植物图鉴页面
 app.get('/plant.ejs',(req, res)=>{
-
-    res.render('plant.ejs', {
-        user:null,
-        info:null
+    var user = req.session.user
+    Mongoose.Plant.find({},function(err,plantlist){
+        console.log(plantlist)
+        if(err) return console.log(err)
+        req.session.page = 1
+        var most = Mongoose.calMostPage(plantlist.length)
+        req.session.mostPage = most
+        res.render("plant.ejs", {
+            info:null,
+            user:user,
+            plantlist:plantlist,
+            page:1,
+            mostPage: most
+        })
     })
-
 })
 
 //植物信息页面
-app.get('/plantinfo.ejs',(req, res)=>{
-
-    res.render('plantinfo.ejs', {
-        user:null,
-        info:null
+app.get('/PlantInfo',(req, res)=>{
+    var user = req.session.user
+    var suburl = req.url.split('?')[1];
+    console.log(suburl)
+    var key = suburl.split('&');
+    var plantname = key[0].split('=')[1];
+    console.log(plantname)
+    Mongoose.Plant.findOne({"plantname": plantname}).exec((err, plant) => {
+        if(err) return console.log(err)
+        res.render('plantinfo.ejs', {
+            user:user,
+            plant:plant
+        })
     })
-
 })
+
+//增加植物图鉴页面
+app.get('/addplant.ejs', (req, res)=>{
+    var user = req.session.user
+    Mongoose.User.findOne({"molename": user.molename}).exec((err, user) => {
+        if(err) return console.log(err)
+        if(user.status){
+            res.render('addplant.ejs', {
+                user:user,
+                info:null
+            })
+        }
+        else{
+            res.render('plant.ejs', {
+                user:user,
+                info:"管理员才能添加图鉴！"
+            })
+        }
+    })
+})
+
+//用户注册
+app.post('/AddPlant', upload.single('photo'), (req, res) => {
+    var user = req.session.user
+    console.log(req.file.filename)
+    var plantname = req.body.plantname
+    var cost = req.body.cost
+    var saleprice = req.body.saleprice
+    var growtime = req.body.growtime
+    var access = req.body.access
+    var rarity = req.body.rarity
+    var photo = req.file.filename
+    Mongoose.InsertPlant(plantname, rarity, cost, saleprice, growtime, access ,photo)
+    
+    Mongoose.Plant.find({},function(err,plantlist){
+        console.log(plantlist)
+        if(err) return console.log(err)
+        req.session.page = 1
+        var most = Mongoose.calMostPage(plantlist.length)
+        req.session.mostPage = most
+        res.render("plant.ejs", {
+            info:"添加成功！",
+            user:user,
+            plantlist:plantlist,
+            page:1,
+            mostPage: most
+        })
+    })
+})
+    
 
 //vip页面
 app.get('/vip.ejs',(req, res)=>{
-
+    var user = req.session.user
     res.render('vip.ejs', {
-        user:null,
+        user:user,
         info:null
     })
 

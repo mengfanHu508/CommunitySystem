@@ -12,13 +12,13 @@
 			<%-include('lf.ejs')%>
 			<div class="col-lg-9">
 				<div class="card-deck" style="width: 850px;">
-					<c:forEach items="${plantList}" var="plant" varStatus="i">
+					<% for(var i = 0; i < plantlist.length; i++) { %>
 						<div class="col-lg-3">
 							<div class="card">
-								<img class="card-img-top" src="/photos/${plant.photo}" height=150px width=150px alt="Card image cap">
+								<img class="card-img-top" src="upload/<%=plantlist[i].photo%>" height=150px width=150px alt="Card image cap">
 								<div class="card-body">
-									<h5 class="card-title">${plant.plantname}</h5>
-									<a href="PlantInfo?plantname=${plant.plantname}">查看详细信息</a>
+									<h5 class="card-title"><%=plantlist[i].name%></h5>
+									<a href="PlantInfo?plantname=<%=plantlist[i].plantname%>">查看详细信息</a>
 								</div>
 							</div>
 							<c:if test="${i.count % 5 == 0}">
@@ -30,7 +30,7 @@
 						
 							</c:if>
 						</div>
-					</c:forEach>
+					<% } %>
 				</div>	
 				<nav aria-label="Page navigation example" style="margin-top: 20px">
 						<ul class="pagination justify-content-center">
@@ -54,7 +54,8 @@
 									href="#"> 下一页</a></li>
 
 							</c:if>
-							<a type="button" class="btn btn-primary" href="addplant.jsp">添加图鉴</a>
+							<a type="button" class="btn btn-primary" href="addplant.ejs">添加图鉴</a>
+							<p style="color: red"><%= info %></p>
 						</ul>
 						
 					</nav>

@@ -1,5 +1,4 @@
 const User = require("./user")
-const Food = require("./food")
 const Plant = require("./plant")
 const Friend = require("./friend")
 const Message = require("./message")
@@ -22,22 +21,7 @@ function InsertUser(molename, password, sex, birth,region, spec, regtime, headim
         console.log("插入user成功")
     })
 }
-//向菜品表插入数据
-function InsertFood(foodname, saleprice, cooking_time, access,materials,rarity,photo) {
-    var food = new Food({
-        foodname: foodname,
-        saleprice: saleprice,
-        cooking_time: cooking_time,
-        access: access,
-        materials: materials,
-        rarity: rarity,
-        photo: photo
-    })
-    food.save((err) => {
-        if(err) return console.log(err)
-        console.log("插入food成功")
-    })
-}
+
 //向植物表插入数据
 function InsertPlant(plantname, rarity, cost, saleprice, growtime, access ,photo) {
     var plant = new Plant({
@@ -103,4 +87,4 @@ function calMostPage(sum) {
     return most
 }
 
-module.exports = {User, Food, Friend,Plant,Message, InsertUser, InsertFood, InsertFriend,InsertMessage,InsertPlant, GetRegTime, GetPublishTime, calMostPage}
+module.exports = {User, Friend,Plant,Message, InsertUser, InsertFriend,InsertMessage,InsertPlant, GetRegTime, GetPublishTime, calMostPage}
