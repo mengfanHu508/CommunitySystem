@@ -1,9 +1,15 @@
 const http = require('http');
 const fs = require('fs');
 const ejs = require('ejs');
+const Mongoose = require('./modules/mongoose.js');
 const express = require('express');
+const session = require('express-session')
+const multer  = require('multer')
+var bodyParser = require('body-parser');
 const app = express()
 
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended:false}));
 const port = 5508
 
 
@@ -13,6 +19,29 @@ app.set("view engine","ejs")
 app.use(express.static("node_modules"));
 app.use(express.static("static/photo"))
 app.use(express.static('static'))
+
+app.use(session({
+    secret: 'this is a session', //服务器生成session签名
+    name: 'username',
+    resave: false, //强制保存session即使他没有变化
+    saveUninitialized: true, //强制保存未初始化的session
+    cookie: {
+        maxAge: 1000 * 60 * 15
+    },
+    rolling: true
+}))
+
+const storage = multer.diskStorage({ //设置文件保存格式
+    destination: function (req, file, cb) {
+      cb(null, 'static/upload')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      var extname = path.extname(file.originalname)
+      cb(null, file.fieldname + '-' + uniqueSuffix + extname)
+    }
+})
+const upload = multer({ storage: storage })
 
 //功能主页
 app.get('/',(req, res)=>{
@@ -52,35 +81,42 @@ app.get('/reg.ejs',(req, res)=>{
 
 //用户登陆
 app.post('/LoginAction',(req, res,next)=>{
+    console.log(req)
     console.log(req.body)
     var molename = req.body.molename;
     var password = req.body.password;
     res.render("userlist.ejs", {
         info: "登陆成功！",
-        user:null,
+        user:{
+            molename,
+            password
+        },
         page:1
     })
-    next()
+    next();
 })
 
 //用户注册
-// app.post('/doReg', upload.single('headimg'), (req, res) => {
-app.post('/RegAction', (req, res) => {
+// app.post('/RegAction', upload.single('headimg'), (req, res) => {
+app.post('/RegAction', (req, res,next) => {
+    console.log(req.body.moleid)
     var moleid = req.body.moleid
     var molename = req.body.molename
     var password = req.body.password
     var sex = req.body.sex
-    if(sex == "1") sex = "男"
-    else sex = "女"
     var birth = req.body.birth
     var region = req.body.region
     var spec = req.body.spec
     var headimg = headimg_default
     if(req.file != null) headimg = req.file.filename
-    var regtime = Service.GetRegTime()
+    var regtime = Mongoose.GetRegTime()
     var manager = req.body.manager
-    // Service.InsertUser(moleid,molename, password, sex, birth, region, spec, regtime, headimg,manager)
-    res.render("login.ejs", {info: "注册成功！"})
+    // Mongoose.InsertUser(moleid,molename, password, sex, birth, region, spec, regtime, headimg,manager)
+    res.render("login.ejs", {
+        user:null,
+        info: "注册成功！"
+    })
+    next();
 })
 
 //我的消息页面
