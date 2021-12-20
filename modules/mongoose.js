@@ -5,9 +5,8 @@ const Friend = require("./friend")
 const Message = require("./message")
 
 //在user表中插入数据
-function InsertUser(moleid,molename, password, sex, birth,region, spec, regtime, headimg, manager) {
+function InsertUser(molename, password, sex, birth,region, spec, regtime, headimg, manager) {
     var user = new User({
-        moleid : moleid,
         molename: molename,
         password: password,
         sex: sex,

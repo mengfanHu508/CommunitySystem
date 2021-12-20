@@ -4,6 +4,7 @@ const ejs = require('ejs');
 const Mongoose = require('./modules/mongoose.js');
 const express = require('express');
 const session = require('express-session')
+const path  = require('path')
 const multer  = require('multer')
 var bodyParser = require('body-parser');
 const app = express()
@@ -22,7 +23,7 @@ app.use(express.static('static'))
 
 app.use(session({
     secret: 'this is a session', //服务器生成session签名
-    name: 'username',
+    name: 'molename',
     resave: false, //强制保存session即使他没有变化
     saveUninitialized: true, //强制保存未初始化的session
     cookie: {
@@ -81,37 +82,55 @@ app.get('/reg.ejs',(req, res)=>{
 
 //用户登陆
 app.post('/LoginAction',(req, res,next)=>{
-    console.log(req)
-    console.log(req.body)
     var molename = req.body.molename;
     var password = req.body.password;
-    res.render("userlist.ejs", {
-        info: "登陆成功！",
-        user:{
-            molename,
-            password
-        },
-        page:1
+    Mongoose.User.findOne({"molename": molename, "password": password}).exec((err, user) => {
+        if(err) return console.log(err)
+        if(!user) res.render("login.ejs", {
+            info: "用户名或密码错误",
+            user: null
+        })
+        else {
+            req.session.user = user
+            console.log("检验成功！！")
+            console.log(Mongoose.User.find({}))
+            Mongoose.User.find({},function(err,userlist){
+                console.log(userlist)
+                if(err) return console.log(err)
+                req.session.page = 1
+                var most = Mongoose.calMostPage(userlist.length)
+                req.session.mostPage = most
+                res.render("userlist.ejs", {
+                    info: "登陆成功！",
+                    user:user,
+                    userlist:userlist,
+                    page:1,
+                    mostPage: most
+                })
+                next();
+            })
+        }
     })
-    next();
+    
 })
 
 //用户注册
-// app.post('/RegAction', upload.single('headimg'), (req, res) => {
-app.post('/RegAction', (req, res,next) => {
-    console.log(req.body.moleid)
-    var moleid = req.body.moleid
+app.post('/RegAction', upload.single('headimg'), (req, res, next) => {
+// app.post('/RegAction', (req, res,next) => {
+    console.log(req)
+    console.log(req.body)
     var molename = req.body.molename
     var password = req.body.password
     var sex = req.body.sex
     var birth = req.body.birth
     var region = req.body.region
     var spec = req.body.spec
+    spec = spec + ""
     var headimg = headimg_default
     if(req.file != null) headimg = req.file.filename
     var regtime = Mongoose.GetRegTime()
     var manager = req.body.manager
-    // Mongoose.InsertUser(moleid,molename, password, sex, birth, region, spec, regtime, headimg,manager)
+    Mongoose.InsertUser(molename, password, sex, birth, region, spec, regtime, headimg,manager)
     res.render("login.ejs", {
         user:null,
         info: "注册成功！"
@@ -141,20 +160,18 @@ app.get('/friendlist.ejs',(req, res)=>{
 
 //用户信息页面
 app.get('/userinfo.ejs',(req, res)=>{
-
+    var user = req.session.user
     res.render('userinfo.ejs', {
-        user:null,
-        info:null
+        user:user
     })
 
 })
 
 //用户列表页面
 app.get('/userlist.ejs',(req, res)=>{
-
+    var user = req.session.user
     res.render('userlist.ejs', {
-        user:null,
-        info:null
+        user:user
     })
 
 })
@@ -205,6 +222,16 @@ app.get('/vip.ejs',(req, res)=>{
     res.render('vip.ejs', {
         user:null,
         info:null
+    })
+
+})
+
+//注销
+app.get('/Logout',(req, res)=>{
+    req.session.user = null
+    res.render("login.ejs", {
+        user:null,
+        info: null
     })
 
 })

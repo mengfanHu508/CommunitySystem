@@ -1,7 +1,6 @@
 const mongoose = require("./db.js")
 
 const UserSchema = {
-    moleid: String,
     molename: String,
     password: String,
     sex: String,
@@ -10,8 +9,11 @@ const UserSchema = {
     spec: String,
     regtime: String,
     headimg: String,
-    manager: String,
-    status: Number
+    manager: Number,
+    status: {
+        type: Number,
+        default:1
+    }
 }
 
 const User = mongoose.model("User", UserSchema, "users")

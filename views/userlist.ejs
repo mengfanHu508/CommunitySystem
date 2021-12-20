@@ -12,7 +12,7 @@
 			<div class="col-lg-9">
 				<div class="card">
 					<div class="card-header">
-						用户列表
+						用户列表--用户总数：<%=userlist.length%>
 						<p style="text-align: center">
 							<span style="color: red" id="c1"></span>
 						</p>
@@ -28,49 +28,53 @@
 										<th scope="col">性别</th>
 										<th scope="col">出生年月</th>
 										<th scope="col">地区</th>
-										<th scope="col">用户状态</th>
 									</tr>
 								</thead>
 								<tbody>
 
-									<c:forEach items="${userList}" var="user" varStatus="i">
+									<% for(var i = 0; i < userlist.length; i++) { %>
 										<tr>
-											<td><img src="/photos/${user.photo}" height=75px></td>
-											<c:if test="${user.status==true}">
-												<td>${user.molename}<span class="badge badge-danger">VIP</span></td>
-											</c:if>
-											<c:if test="${user.status!=true}">
-												<td>${user.molename}</td>
-											</c:if>
-											<td>${user.sex}</td>
-											<td>${user.birthCn}</td>
-											<td>${user.region}</td>
-
-											<c:if test="${user.status==true}">
-												<td style="color: red">${user.statusCn}</td>
-												<td><a type="button" class="btn btn-success"
-													href="UserInfo?molename=${user.molename}">详情</a></td>
-											</c:if>
-											<c:if test="${user.status!=true}">
-												<td>${user.statusCn}</td>
-												<td><a type="button" class="btn btn-success"
-													href="UserInfo?molename=${user.molename}">详情</a></td>
-											</c:if>
+											<td><img src="upload/<%=userlist[i].headimg%>" height=75px></td>
+											<td><%=userlist[i].molename%></td>
+											<td><%=userlist[i].sex%></td>
+											<td><%=userlist[i].birth%></td>
+											<td><%=userlist[i].region%></td>
+											<td><a type="button" class="btn btn-success"
+												href="userinfo">详情</a></td>
 											<td><a type="button" class="btn btn-primary"
-												id="btn${i.count}">加为好友</a> <script>
-													var btn = document.getElementById("btn${i.count}")
-													btn.onclick = function() {
-														//     1.url   2.成功后的回调函数
-														$.get("AddMessage",{friendname : '${user.molename}',message: '请求加你为好友'},function(data) {
-															//从后台拿到最新数据
-															var c1 = document.getElementById("c1")
-															c1.innerHTML = data;
-															});
+												id="btn<%=i%>" href="AddMessage">加为好友</a> 
+												<script>
+													function AddMessage(){
+														var xmlhttp;
+														if (window.XMLHttpRequest)
+														{
+															//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+															xmlhttp=new XMLHttpRequest();
+														}
+														else
+														{
+															// IE6, IE5 浏览器执行代码
+															xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+														}
+														xmlhttp.onreadystatechange=function()
+														{
+															if (xmlhttp.readyState==4 && xmlhttp.status==200)
+															{
+																document.getElementById("btn<%=i%>").innerHTML=xmlhttp.responseText;
+															}
+															else{
+																document.getElementById("btn<%=i%>").innerHTML="服务无响应";
+															}
+													
+														}
+														xmlhttp.open("Post","/AddMessage",true);
+														xmlhttp.send(friendname = '<%=userlist[i].molename%>' , message = '请求加你为好友');
 													}
-												</script></td>
+													</script>
+												</td>
 											<td>
 										</tr>
-									</c:forEach>
+									<% } %>
 								</tbody>
 							</table>
 						</div>
