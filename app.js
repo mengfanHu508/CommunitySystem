@@ -92,8 +92,6 @@ app.post('/LoginAction',(req, res,next)=>{
         })
         else {
             req.session.user = user
-            console.log("检验成功！！")
-            console.log(Mongoose.User.find({}))
             Mongoose.User.find({},function(err,userlist){
                 console.log(userlist)
                 if(err) return console.log(err)
@@ -138,6 +136,21 @@ app.post('/RegAction', upload.single('headimg'), (req, res, next) => {
     next();
 })
 
+//加好友ajax
+app.get('/AddMessage',(req, res)=>{
+    console.log(req.body)
+    // Mongoose.Message.findOne({"molename": molename, "message": message}).exec((err, message) => {
+    //     if(err) return console.log(err)
+    //     if(!message){
+
+    //         res.end("已成功发送请求")
+    //     }
+    //     else {
+
+    //     }
+    res.send("aa");
+})
+
 //我的消息页面
 app.get('/mamessage.ejs',(req, res)=>{
 
@@ -159,21 +172,35 @@ app.get('/friendlist.ejs',(req, res)=>{
 })
 
 //用户信息页面
-app.get('/userinfo.ejs',(req, res)=>{
+app.get('/userinfo',(req, res)=>{
     var user = req.session.user
-    res.render('userinfo.ejs', {
-        user:user
+    var suburl = req.url.split('?')[1];
+    var key = suburl.split('&');
+    var molename = key[0].split('=')[1];
+    console.log(molename)
+    Mongoose.User.findOne({"molename": molename}).exec((err, user) => {
+        res.render('userinfo.ejs', {
+            user:user
+        })
     })
-
 })
 
 //用户列表页面
 app.get('/userlist.ejs',(req, res)=>{
     var user = req.session.user
-    res.render('userlist.ejs', {
-        user:user
+    Mongoose.User.find({},function(err,userlist){
+        if(err) return console.log(err)
+        req.session.page = 1
+        var most = Mongoose.calMostPage(userlist.length)
+        req.session.mostPage = most
+        res.render("userlist.ejs", {
+            info: "登陆成功！",
+            user:user,
+            userlist:userlist,
+            page:1,
+            mostPage: most
+        })
     })
-
 })
 
 //菜品图鉴页面

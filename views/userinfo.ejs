@@ -17,18 +17,18 @@
 							<h2>用户信息：</h2>
 							<div class="row">
 								<div class="col-lg-8">
-									<p>摩尔号:${user.moleid}</p>
-									<p>昵称:${user.molename}</p>
-									<p>性别:${user.sex}</p>
-									<p>生日:${user.birth}</p>
-									<p>地区:${user.region}</p>
-									<p>特产:${user.spec}</p>
-									<p>个人像:${user.photo}</p>
-									<p>注册时间:${user.regTime}</p>
+									<p>昵称:<%= user.molename %></p>
+									<p>性别:<%= user.sex %></p>
+									<p>生日:<%= user.birth %></p>
+									<p>地区:<%= user.region %></p>
+									<p>特产:<%= user.spec %></p>
+									<p>个人像:<%= user.headimg %></p>
+									<p>注册时间:<%= user.regtime %></p>
+									<p>是否管理员:<%= user.manager %></p>
 								</div>
 								<div class="col-lg-8">
 									<p>
-										个人像: <img src="/photos/${user.photo}" height=250px>
+										个人像: <img src="upload/<%= user.headimg %>" height=250px>
 									</p>
 								</div>
 								<div class="col-sm-3">

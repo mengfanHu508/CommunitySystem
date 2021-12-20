@@ -40,9 +40,9 @@
 											<td><%=userlist[i].birth%></td>
 											<td><%=userlist[i].region%></td>
 											<td><a type="button" class="btn btn-success"
-												href="userinfo">详情</a></td>
-											<td><a type="button" class="btn btn-primary"
-												id="btn<%=i%>" href="AddMessage">加为好友</a> 
+												href="userinfo?molename=<%=userlist[i].molename%>">详情</a></td>
+											<td><button type="button" class="btn btn-primary"
+												id="btn<%=i%>" onclick="AddMessage()">加为好友</button> </td>
 												<script>
 													function AddMessage(){
 														var xmlhttp;
@@ -60,18 +60,20 @@
 														{
 															if (xmlhttp.readyState==4 && xmlhttp.status==200)
 															{
-																document.getElementById("btn<%=i%>").innerHTML=xmlhttp.responseText;
+																document.getElementById("c1").innerHTML=xmlhttp.responseText;
 															}
 															else{
-																document.getElementById("btn<%=i%>").innerHTML="服务无响应";
+																document.getElementById("c1").innerHTML="服务无响应";
 															}
 													
 														}
-														xmlhttp.open("Post","/AddMessage",true);
-														xmlhttp.send(friendname = '<%=userlist[i].molename%>' , message = '请求加你为好友');
+														xmlhttp.open("POST","/AddMessage?a=2",true);
+														xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+														// xmlhttp.send(JSON.stringify({molename:'<%=userlist[i].molename%>',message:'请求加你为好友'}));
+														xmlhttp.send();
 													}
 													</script>
-												</td>
+												
 											<td>
 										</tr>
 									<% } %>
