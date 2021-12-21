@@ -26,55 +26,90 @@
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach items="${MessageList}" var="message" varStatus="i">
-										<c:if test="${message.message == '请求加你为好友'}">
+									<% for(var i = 0; i < messagelist.length; i++) { %>
+										<%  if (messagelist[i].message == '请求加你为好友') { %> 
+											<%  if (messagelist[i].molename == user.molename) { %> 
 											<tr>
-													<td><img src="/photos/${message.photo}" height=75px></td>
-													<td><a href="UserInfo?molename=${message.friendname}">${message.friendname}</a></td>
-													<td>${message.message}
+													<!-- <td><img src="upload/<%=messagelist[i].photo%>" height=75px></td> -->
+													<td><a href="userInfo?molename=<%=messagelist[i].friendname%>"><%=messagelist[i].friendname%></a></td>
+													<td><%=messagelist[i].message%>
 													
-													<p><span style="color:red" id="c1${i.count}"></span></p>
-													<p><span style="color:red" id="c2${i.count}"></span></p>
+													<p><span style="color:red" id="c1<%=i%>"></span></p>
+													<p><span style="color:red" id="c2<%=i%>"></span></p>
 													</td>
 													
 													<td>
-													<a type="button" class="btn btn-success" id = "btn1${i.count}">接受</a>
+													<a type="button" class="btn btn-success" id = "btn1<%=i%>" onclick = "AddFriend<%=i%>()">接受</a>
 													<script>
-													var btn = document.getElementById("btn1${i.count}")
-													
-													btn.onclick = function(){
+														function AddFriend<%=i%>(){
+															var xmlhttp;
+															if (window.XMLHttpRequest)
+															{
+																//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+																xmlhttp=new XMLHttpRequest();
+															}
+															else
+															{
+																// IE6, IE5 浏览器执行代码
+																xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+															}
+															xmlhttp.onreadystatechange=function()
+															{
+																if (xmlhttp.readyState==4 && xmlhttp.status==200)
+																{
+																	document.getElementById("c1<%=i%>").innerHTML=xmlhttp.responseText;
+																}
+																else{
+																	document.getElementById("c1<%=i%>").innerHTML="服务无响应";
+																}
 														
-														//     1.url   2.成功后的回调函数
-														$.get("AddFriend",{friendname:'${message.friendname}'},function(data){
-															//从后台拿到最新数据
-															var c1 = document.getElementById("c1${i.count}")
-															c1.innerHTML = data;
-															
-														});
-													}
-													</script>	
+															}
+															xmlhttp.open("POST","/AddFriend",false);
+															xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+															xmlhttp.send("molename=<%=user.molename%>&friendname=<%=userlist[i].molename%>");
+															// xmlhttp.send("name=smyhvae&age=27");
+														}
+														</script>
+													
 														
 													
-													<a type="button" class="btn btn-danger" id = "btn2${i.count}">删除信息</a>
+													<a type="button" class="btn btn-danger" id = "btn2<%=i%> " onclick = "DeleteMessage<%=i%>()">删除信息</a>
 													<script>
-													var btn = document.getElementById("btn2${i.count}")
-													
-													btn.onclick = function(){
+														function DeleteMessage<%=i%>(){
+															var xmlhttp;
+															if (window.XMLHttpRequest)
+															{
+																//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+																xmlhttp=new XMLHttpRequest();
+															}
+															else
+															{
+																// IE6, IE5 浏览器执行代码
+																xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+															}
+															xmlhttp.onreadystatechange=function()
+															{
+																if (xmlhttp.readyState==4 && xmlhttp.status==200)
+																{
+																	document.getElementById("c2<%=i%>").innerHTML=xmlhttp.responseText;
+																}
+																else{
+																	document.getElementById("c2<%=i%>").innerHTML="服务无响应";
+																}
 														
-														//     1.url   2.成功后的回调函数
-														$.get("DeleteMessage",{friendname:'${message.friendname}'},function(data){
-															//从后台拿到最新数据
-															var c2 = document.getElementById("c2${i.count}")
-															c2.innerHTML = data;
-															
-														});
-													}
-													</script>	
+															}
+															xmlhttp.open("POST","/DeleteMessage",false);
+															xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+															xmlhttp.send("molename=<%=user.molename%>&friendname=<%=userlist[i].molename%>&message=请求加你为好友");
+															// xmlhttp.send("name=smyhvae&age=27");
+														}
+														</script>
 													</td>	
-													<td>${message.sendtime}</td>
+													<td><%=messagelist[i].sendtime%></td>
 											</tr>
-										</c:if>
-									</c:forEach>
+											<% } %>
+										<% } %>
+									<% } %>
 									
 									
 								</tbody>

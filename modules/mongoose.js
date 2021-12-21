@@ -54,6 +54,16 @@ function InsertMessage(molename, friendname, message, sendtime) {
     })
 }
 
+function DeleteMessage(molename, friendnamen) {
+    Friend.findByIdAndDelete({"molename":molename,"friendname":friendname}, (err, data) => {
+        if(err) {
+            console.log(err)
+            return
+        }
+        console.log(data)  
+    })
+}
+
 //向好友表插入数据
 function InsertFriend(molename, friendname) {
     var friend = new Friend({
@@ -108,4 +118,4 @@ function calMostPage(sum) {
     return most
 }
 
-module.exports = {User, Friend,Plant,Message, InsertUser, InsertFriend,DeleteFriend,InsertMessage,InsertPlant,ChangeStatus, GetRegTime, GetChartTime, calMostPage}
+module.exports = {User, Friend,Plant,Message, InsertUser, InsertFriend,DeleteFriend,InsertMessage,DeleteMessage,InsertPlant,ChangeStatus, GetRegTime, GetChartTime, calMostPage}

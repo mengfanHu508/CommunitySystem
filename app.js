@@ -11,7 +11,7 @@ const app = express()
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:false}));
-const port = 5508
+const port = 50508
 
 
 const headimg_default = "default.jpg"
@@ -134,30 +134,47 @@ app.post('/RegAction', upload.single('headimg'), (req, res, next) => {
     next();
 })
 
-//加好友ajax
-app.get('/AddMessage',(req, res)=>{
+//加好友ajax发消息
+app.post('/AddMessage',(req, res)=>{
+    var user = req.session.user
     console.log(req.body)
-    // Mongoose.Message.findOne({"molename": molename, "message": message}).exec((err, message) => {
-    //     if(err) return console.log(err)
-    //     if(!message){
-
-    //         res.end("已成功发送请求")
-    //     }
-    //     else {
-
-    //     }
-    res.send("aa");
+    var friendname = req.body.friendname
+    var messageSend = req.body.message
+    Mongoose.Message.findOne({"molename": user.molename,"friendname":friendname, "message": messageSend}).exec((err, message) => {
+        if(err) return console.log(err)
+        if(!message){
+            sendtime = Mongoose.GetChartTime();
+            Mongoose.InsertMessage(friendname, user.molename, messageSend, sendtime)
+        }
+        res.send("已成功发送请求")
+    })
 })
 
 
 //我的消息页面
 app.get('/mymessage.ejs',(req, res)=>{
     var user = req.session.user
-    res.render('mymessage.ejs', {
-        user:user,
-        info:null
+    Mongoose.Message.aggregate([
+        {
+            $lookup:{
+                from:"users",
+                localField:"friendname",
+                foreignField:"molename",
+                as:"user"
+            }
+        }
+    ],function(err,messagelist){
+        if(err)  return console.log(err)
+        req.session.mostPage = Mongoose.calMostPage(messagelist.length)
+        req.session.messagelist = messagelist
+        console.log(messagelist)
+        res.render('mymessage.ejs', {
+            user:user,
+            messagelist:messagelist,
+            page: req.session.page,
+            mostPage:req.session.mostPage,
+        })
     })
-
 })
 
 //跳转聊天
@@ -220,6 +237,39 @@ app.post('/deleteChart',(req, res)=>{
         info:null
     })
 
+})
+
+//同意加好友
+app.post('/AddFriend',(req, res)=>{
+    var user = req.session.user
+    console.log(req.body)
+    var molename = req.body.molename
+    var friendname = req.body.friendname
+    Mongoose.InsertFriend(molename, friendname).exec((err, message) => {
+        if(err) return console.log(err)
+        Mongoose.DeleteMessage(molename,friendname)
+        Mongoose.Message.aggregate([
+            {
+                $lookup:{
+                    from:"users",
+                    localField:"friendname",
+                    foreignField:"molename",
+                    as:"user"
+                }
+            }
+        ],function(err,messagelist){
+            if(err)  return console.log(err)
+            req.session.mostPage = Mongoose.calMostPage(messagelist.length)
+            req.session.messagelist = messagelist
+            console.log(messagelist)
+            res.render('mymessage.ejs', {
+                user:user,
+                messagelist:messagelist,
+                page: req.session.page,
+                mostPage:req.session.mostPage,
+            })
+        })
+    })
 })
 
 //好友列表页面(连表查询)
