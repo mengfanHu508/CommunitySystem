@@ -2,6 +2,7 @@ const User = require("./user")
 const Plant = require("./plant")
 const Friend = require("./friend")
 const Message = require("./message")
+const { findOneAndDelete } = require("./user")
 
 //在user表中插入数据
 function InsertUser(molename, password, sex, birth,region, spec, regtime, headimg, manager) {
@@ -65,13 +66,33 @@ function InsertFriend(molename, friendname) {
     })
 }
 
+function DeleteFriend(molename, friendname) {
+    Friend.findByIdAndDelete({"molename":molename,"friendname":friendname}, (err, data) => {
+        if(err) {
+            console.log(err)
+            return
+        }
+        console.log(data)  
+    })
+}
+
+function ChangeStatus(molename,vip){
+    User.findOneAndUpdate({"molename":molename},  { "vip": vip}, {new: true}, (err, data) => {
+        if(err) {
+            console.log(err)
+            return
+        }
+        console.log(data)
+    })
+}
+
 function GetRegTime() {
     var d = new Date()
     var time = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate()
     return time
 }
 
-function GetPublishTime() {
+function GetChartTime() {
     var d = new Date()
     var time = d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds()
     return time
@@ -87,4 +108,4 @@ function calMostPage(sum) {
     return most
 }
 
-module.exports = {User, Friend,Plant,Message, InsertUser, InsertFriend,InsertMessage,InsertPlant, GetRegTime, GetPublishTime, calMostPage}
+module.exports = {User, Friend,Plant,Message, InsertUser, InsertFriend,DeleteFriend,InsertMessage,InsertPlant,ChangeStatus, GetRegTime, GetChartTime, calMostPage}

@@ -23,19 +23,19 @@
 									</tr>
 								</thead>
 								<tbody>
-									<c:forEach items="${friendList}" var="friend" varStatus="i">
+									<% for(var i = 0; i < friendlist.length; i++) { %>
 										<tr>
 											<td>
-												<img src="/photos/${friend.photo} " height=75px>
+												<img src="upload/<%=friendlist[i].phoho%> " height=75px>
 											</td>
-											<td>${friend.friend}</td>
+											<td><%=friendlist[i].friendname%></td>
 											<td><a type="button" class="btn btn-success"
-												href="UserInfo?molename=${friend.friend}">详细信息</a>
-											<a type="button" class="btn btn-primary" href="ChartList?friendname=${friend.friend}">私聊</a>
+												href="userInfo?molename=<%=friendlist[i].friendname%>">详细信息</a>
+											<a type="button" class="btn btn-primary" href="chartList?<%=friendlist[i].friendname%>">私聊</a>
 											<a type="button" class="btn btn-danger"
-												href="DeleteFriend?friendname=${friend.friend}">删除好友</a></td>
+												href="deleteFriend?friendname=<%=friendlist[i].friendname%>">删除好友</a></td>
 										</tr>
-									</c:forEach>
+									<% } %>
 								</tbody>
 							</table>
 						</div>

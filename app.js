@@ -115,8 +115,6 @@ app.post('/LoginAction',(req, res,next)=>{
 //用户注册
 app.post('/RegAction', upload.single('headimg'), (req, res, next) => {
 // app.post('/RegAction', (req, res,next) => {
-    console.log(req)
-    console.log(req.body)
     var molename = req.body.molename
     var password = req.body.password
     var sex = req.body.sex
@@ -128,7 +126,7 @@ app.post('/RegAction', upload.single('headimg'), (req, res, next) => {
     if(req.file != null) headimg = req.file.filename
     var regtime = Mongoose.GetRegTime()
     var manager = req.body.manager
-    Mongoose.InsertUser(molename, password, sex, birth, region, spec, regtime, headimg,manager)
+    Mongoose.InsertUser(molename, password, sex, birth, region, spec, regtime, headimg,manager,0)
     res.render("login.ejs", {
         user:null,
         info: "注册成功！"
@@ -151,6 +149,7 @@ app.get('/AddMessage',(req, res)=>{
     res.send("aa");
 })
 
+
 //我的消息页面
 app.get('/mymessage.ejs',(req, res)=>{
     var user = req.session.user
@@ -161,14 +160,130 @@ app.get('/mymessage.ejs',(req, res)=>{
 
 })
 
-//好友列表页面
-app.get('/friendlist.ejs',(req, res)=>{
+//跳转聊天
+app.get('/charList',(req, res)=>{
     var user = req.session.user
-    res.render('friendlist.ejs', {
+    var suburl = req.url.split('?')[1];
+    var key = suburl.split('&');
+    var friendname = key[0].split('=')[1];
+    console.log(friendname)
+    req.session.friendname = friendname
+    Mongoose.User.findOne({"friendname":friendname}).exec((err, friend) => {
+        if(err) return console.log(err)
+        Mongoose.Message.find({"molename": user.molename,"friendname":friendname}).exec((err, messagelist) => {
+            if(err) return console.log(err)
+            res.render('messagesend.ejs', {
+                user:user,
+                friend:friend,
+                messagelist:messagelist
+            })
+        })
+    })
+})
+
+//聊天页面
+app.get('/messagesend.ejs',(req, res)=>{
+    var user = req.session.user
+    res.render('messagesend.ejs', {
         user:user,
         info:null
     })
 
+})
+
+//新增聊天记录
+app.post('/MessageSend',(req, res,next)=>{
+    var user = req.session.user
+    var message = req.body.message
+    var friendname = req.body.friendname
+    var chartime = Mongoose.GetChartTime
+    Mongoose.InsertUser(user.molename, friendname, message,chartime)
+    Mongoose.User.findOne({"friendname":friendname}).exec((err, friend) => {
+        if(err) return console.log(err)
+        Mongoose.Message.find({"molename": user.molename,"friendname":friendname}).exec((err, messagelist) => {
+            if(err) return console.log(err)
+            res.render('messagesend.ejs', {
+                user:user,
+                friend:friend,
+                messagelist:messagelist
+            })
+        })
+    })
+    next();
+})
+
+//删除聊天记录
+app.post('/deleteChart',(req, res)=>{
+    var user = req.session.user
+    res.render('messagesend.ejs', {
+        user:user,
+        info:null
+    })
+
+})
+
+//好友列表页面(连表查询)
+app.get('/friendlist.ejs',(req, res)=>{
+    var user = req.session.user
+    Mongoose.Friend.aggregate([
+        {
+            $lookup:{
+                from:"users",
+                localField:"friendname",
+                foreignField:"molename",
+                as:"user"
+            }
+        },
+        {
+            $sort: {"time":-1}
+        }
+    ],function(err,friendlist){
+        if(err)  return console.log(err)
+        req.session.mostPage = Mongoose.calMostPage(friendlist.length)
+        req.session.friendlist = friendlist
+        console.log(friendlist)
+        res.render("friendlist.ejs", {
+            user: user,
+            friendlist: friendlist,
+            page: req.session.page,
+            mostPage:req.session.mostPage,
+        })
+    })
+
+})
+
+//删除好友
+app.post('/deleteFriend',(req, res)=>{
+    var user = req.session.user
+    var suburl = req.url.split('?')[1];
+    var key = suburl.split('&');
+    var friendname = key[0].split('=')[1];
+    console.log(friendname)
+    Mongoose.DeleteFriend(user.molename,friendname)
+    Mongoose.Friend.aggregate([
+        {
+            $lookup:{
+                from:"users",
+                localField:"friendname",
+                foreignField:"molename",
+                as:"user"
+            }
+        },
+        {
+            $sort: {"time":-1}
+        }
+    ],function(err,friendlist){
+        if(err)  return console.log(err)
+        req.session.mostPage = Mongoose.calMostPage(friendlist.length)
+        req.session.friendlist = friendlist
+        console.log(friendlist)
+        res.render("friendlist.ejs", {
+            user: user,
+            friendlist: friendlist,
+            page: req.session.page,
+            mostPage:req.session.mostPage,
+        })
+    })
 })
 
 //用户信息页面
@@ -226,17 +341,17 @@ app.get('/plant.ejs',(req, res)=>{
 //植物信息页面
 app.get('/PlantInfo',(req, res)=>{
     var user = req.session.user
-    var suburl = req.url.split('?')[1];
-    console.log(suburl)
+    var url = decodeURI(req.url)
+    var suburl = url.split('?')[1];
     var key = suburl.split('&');
     var plantname = key[0].split('=')[1];
-    console.log(plantname)
     Mongoose.Plant.findOne({"plantname": plantname}).exec((err, plant) => {
         if(err) return console.log(err)
         res.render('plantinfo.ejs', {
             user:user,
             plant:plant
         })
+        console.log(plant)
     })
 })
 
@@ -298,6 +413,28 @@ app.get('/vip.ejs',(req, res)=>{
         info:null
     })
 
+})
+
+//更改vip状态
+app.get('/ChangeStatus',(req, res)=>{
+    var user = req.session.user
+    var url = decodeURI(req.url)
+    var suburl = url.split('?')[1];
+    var key = suburl.split('&');
+    var vip = key[0].split('=')[1];
+    console.log(vip)
+    Mongoose.ChangeStatus(user.molename,vip);
+    if(vip == 1){
+        res.render('vip.ejs', {
+            user:user,
+            info:"已成为VIP！！"
+        })
+    }else if (vip == 2){
+        res.render('vip.ejs', {
+            user:user,
+            info:"已成为超级VIP！！"
+        })
+    }
 })
 
 //注销

@@ -10,7 +10,7 @@
 		<div
 			class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
 			<h1 class="display-4">超级拉姆</h1>
-			<h2 style="color: red">${info}</h2>
+			<h2 style="color: red"><%= info %></h2>
 			<p class="lead">总体来看，摩尔庄园手游打算走小花仙的老路，非常逼氪。虽然扭蛋里面都是一些装扮，但是逼氪的味道已经满满当当了。不充钱可以玩，但是很难像童年那样愉快地玩耍。</p>
 		</div>
 		<div class="container">
@@ -30,7 +30,7 @@
 							<li>无特权</li>
 						</ul>
 						<a type="button" class="btn btn-lg btn-block btn-outline-primary"
-							href="index.jsp">穷比买不起</a>
+							href="userlist.ejs">穷比买不起</a>
 					</div>
 				</div>
 				<div class="card mb-4 shadow-sm">
@@ -48,7 +48,7 @@
 							<li>4、随时召唤超级拉姆</li>
 						</ul>
 						<a type="button" class="btn btn-lg btn-block btn-primary"
-							href="ChangeStatus?molename=${molename}">整个好活？</a>
+							href="ChangeStatus?vip=1">整个好活？</a>
 					</div>
 				</div>
 				<div class="card mb-4 shadow-sm">
@@ -66,7 +66,7 @@
 							<li>4、帅就完了</li>
 						</ul>
 						<a type="button" class="btn btn-lg btn-block btn-primary"
-							href="ChangeStatus?molename=${molename}">冲冲冲！</a>
+							href="ChangeStatus?vip=2">冲冲冲！</a>
 					</div>
 				</div>
 			</div>

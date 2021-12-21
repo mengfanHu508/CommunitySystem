@@ -10,7 +10,8 @@ const UserSchema = {
     regtime: String,
     headimg: String,
     manager: Number,
-    status: Number
+    status: Number,
+    vip:Number
 }
 
 const User = mongoose.model("User", UserSchema, "users")

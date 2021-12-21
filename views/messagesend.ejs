@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>私信界面</title>
+<%-include('bt.ejs')%>
+</head>
+<body style="background: url(photo/bg.jpg)">
+	<%-include('nav.ejs')%>
+	<div class="container">
+		<div class="row" style="margin-top: 10px">
+			<%-include('lf.ejs')%>
+			<div class="col-lg-9">
+				<div class="card">
+					<form method="post" action="MessageSend">
+						<div class="card-header">
+							<img src="upload/<%=friend.photo%>" height=75px> <%=friend.molename%>
+							<p style="text-align: right"><a type="button" class="btn btn-danger" 
+							href="deleteChart?friendname=<%=friend.molename%>">删除聊天记录</a></p>
+						</div>
+						<div class="card-body">
+							<% for(var i = 0; i < messagelist.length; i++) { %>
+								<div>
+									<%  if (user.molename == messagelist[i].molename) { %> 
+										<%  if (messagelist[i].message != '请求加你为好友') { %>
+											<p style="text-align: center">
+												<a><%=messagelist[i].sendtime%></a>
+											</p>
+											<p
+												style="text-align: right; margin-right: 50px; font-size: 25px">
+												<span class="badge badge-info"><%=messagelist[i].message%></span>
+											</p>
+											<% } %>
+									<% } %>
+									<%  if (user.molename != messagelist[i].molename) { %> 
+										<%  if (messagelist[i].message != '请求加你为好友') { %>
+											<p style="text-align: center">
+												<a><%=messagelist[i].sendtime%></a>
+											</p>
+											<p
+												style="text-align: left; margin-left: 50px; font-size: 25px">
+												<span class="badge badge-info"><%=messagelist[i].message%></span>
+											</p>
+										<% } %>
+									<% } %>
+								</div>
+
+							<% } %>
+							<div class="form-group">
+								<textarea class="form-control" id="exampleFormControlTextarea1"
+									rows="3" name="message"></textarea>
+								<div style="text-align: right">
+									<button type="submit" class="btn btn-success">发送</button>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+	<div class="col-lg-6">
+		<div>
+			<br></br> <br></br> <br></br> <br></br>
+		</div>
+	</div>
+	<%-include('bottom.ejs')%>
+
+
+</body>
+</html>
