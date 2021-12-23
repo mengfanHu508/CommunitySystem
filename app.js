@@ -7,6 +7,7 @@ const session = require('express-session')
 const path  = require('path')
 const multer  = require('multer')
 var bodyParser = require('body-parser');
+const { time } = require('console');
 const app = express()
 
 app.use(bodyParser.json())
@@ -145,8 +146,11 @@ app.post('/AddMessage',(req, res)=>{
         if(!message){
             sendtime = Mongoose.GetChartTime();
             Mongoose.InsertMessage(friendname, user.molename, messageSend, sendtime)
+            res.send("已成功发送请求！")
+        }else{
+            res.send("已经是好友！")
         }
-        res.send("已成功发送请求")
+        
     })
 })
 
@@ -177,8 +181,8 @@ app.get('/mymessage.ejs',(req, res)=>{
     })
 })
 
-//跳转聊天
-app.get('/charList',(req, res)=>{
+//跳转聊天页面
+app.get('/chartList',(req, res)=>{
     var user = req.session.user
     var suburl = req.url.split('?')[1];
     var key = suburl.split('&');
@@ -245,9 +249,19 @@ app.post('/AddFriend',(req, res)=>{
     console.log(req.body)
     var molename = req.body.molename
     var friendname = req.body.friendname
-    Mongoose.InsertFriend(molename, friendname).exec((err, message) => {
-        if(err) return console.log(err)
-        Mongoose.DeleteMessage(molename,friendname)
+    Mongoose.InsertFriend(molename, friendname)
+    Mongoose.DeleteMessage(molename,friendname)
+    
+})
+
+//不同意加好友
+app.get('/DeleteMessageFriend',(req, res)=>{
+    var user = req.session.user
+    var suburl = req.url.split('?')[1];
+    var key = suburl.split('&');
+    var molename = key[0].split('=')[1];
+    var friendname = key[1].split('=')[1];
+    Mongoose.Message.findOneAndRemove({"molename":molename,"friendname":friendname}).exec((err) => {
         Mongoose.Message.aggregate([
             {
                 $lookup:{
@@ -268,6 +282,42 @@ app.post('/AddFriend',(req, res)=>{
                 page: req.session.page,
                 mostPage:req.session.mostPage,
             })
+        })
+    })
+    
+})
+
+//删除好友
+app.get('/deleteFriend',(req, res)=>{
+    var user = req.session.user
+    var suburl = req.url.split('?')[1];
+    var key = suburl.split('&');
+    var friendname = key[0].split('=')[1];
+    console.log(user.molename)
+    console.log(friendname)
+    Mongoose.DeleteFriend(user.molename,friendname)
+    Mongoose.Friend.aggregate([
+        {
+            $lookup:{
+                from:"users",
+                localField:"friendname",
+                foreignField:"molename",
+                as:"user"
+            }
+        },
+        {
+            $sort: {"time":-1}
+        }
+    ],function(err,friendlist){
+        if(err)  return console.log(err)
+        req.session.mostPage = Mongoose.calMostPage(friendlist.length)
+        req.session.friendlist = friendlist
+        console.log(friendlist)
+        res.render("friendlist.ejs", {
+            user: user,
+            friendlist: friendlist,
+            page: req.session.page,
+            mostPage:req.session.mostPage,
         })
     })
 })

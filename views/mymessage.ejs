@@ -30,7 +30,7 @@
 										<%  if (messagelist[i].message == '请求加你为好友') { %> 
 											<%  if (messagelist[i].molename == user.molename) { %> 
 											<tr>
-													<!-- <td><img src="upload/<%=messagelist[i].photo%>" height=75px></td> -->
+													<td><img src="upload/<%=messagelist[i].user[0].headimg%>" height=75px></td>
 													<td><a href="userInfo?molename=<%=messagelist[i].friendname%>"><%=messagelist[i].friendname%></a></td>
 													<td><%=messagelist[i].message%>
 													
@@ -66,44 +66,15 @@
 															}
 															xmlhttp.open("POST","/AddFriend",false);
 															xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-															xmlhttp.send("molename=<%=user.molename%>&friendname=<%=userlist[i].molename%>");
+															xmlhttp.send("molename=<%=user.molename%>&friendname=<%=messagelist[i].friendname%>");
 															// xmlhttp.send("name=smyhvae&age=27");
 														}
 														</script>
 													
 														
 													
-													<a type="button" class="btn btn-danger" id = "btn2<%=i%> " onclick = "DeleteMessage<%=i%>()">删除信息</a>
-													<script>
-														function DeleteMessage<%=i%>(){
-															var xmlhttp;
-															if (window.XMLHttpRequest)
-															{
-																//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
-																xmlhttp=new XMLHttpRequest();
-															}
-															else
-															{
-																// IE6, IE5 浏览器执行代码
-																xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-															}
-															xmlhttp.onreadystatechange=function()
-															{
-																if (xmlhttp.readyState==4 && xmlhttp.status==200)
-																{
-																	document.getElementById("c2<%=i%>").innerHTML=xmlhttp.responseText;
-																}
-																else{
-																	document.getElementById("c2<%=i%>").innerHTML="服务无响应";
-																}
-														
-															}
-															xmlhttp.open("POST","/DeleteMessage",false);
-															xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-															xmlhttp.send("molename=<%=user.molename%>&friendname=<%=userlist[i].molename%>&message=请求加你为好友");
-															// xmlhttp.send("name=smyhvae&age=27");
-														}
-														</script>
+													<a type="button" class="btn btn-danger" id = "btn2<%=i%> " href = "/DeleteMessageFriend?molename=<%=user.molename%>&friendname=<%=messagelist[i].friendname%>">删除信息</a>
+												
 													</td>	
 													<td><%=messagelist[i].sendtime%></td>
 											</tr>

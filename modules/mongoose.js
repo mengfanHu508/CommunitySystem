@@ -54,13 +54,14 @@ function InsertMessage(molename, friendname, message, sendtime) {
     })
 }
 
-function DeleteMessage(molename, friendnamen) {
-    Friend.findByIdAndDelete({"molename":molename,"friendname":friendname}, (err, data) => {
+function DeleteMessage(molename, friendname) {
+    Message.findOneAndRemove({"molename":molename,"friendname":friendname}, (err, data) => {
         if(err) {
+            console.log("删除信息失败")  
             console.log(err)
             return
         }
-        console.log(data)  
+        console.log("删除信息成功")  
     })
 }
 
@@ -76,13 +77,15 @@ function InsertFriend(molename, friendname) {
     })
 }
 
+
 function DeleteFriend(molename, friendname) {
-    Friend.findByIdAndDelete({"molename":molename,"friendname":friendname}, (err, data) => {
+    Friend.findOneAndRemove({"molename":molename,"friendname":friendname}, (err, data) => {
         if(err) {
+            console.log("删除好友失败")  
             console.log(err)
             return
         }
-        console.log(data)  
+        console.log("删除好友成功")  
     })
 }
 
@@ -92,7 +95,7 @@ function ChangeStatus(molename,vip){
             console.log(err)
             return
         }
-        console.log(data)
+        console.log(molename + "成为VIP")
     })
 }
 

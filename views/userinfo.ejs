@@ -34,21 +34,37 @@
 									<p>
 										<span style="color:red" id="c1"></span>
 									</p>
-									<a type="button" class="btn btn-primary" id="btn1">加为好友</a>
+									<a type="button" class="btn btn-primary" id="btn1" onclick="AddMessage()">加为好友</a>
 									<script>
-									var btn = document.getElementById("btn1")
-									
-									btn.onclick = function(){
+										function AddMessage(){
+											var xmlhttp;
+											if (window.XMLHttpRequest)
+											{
+												//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+												xmlhttp=new XMLHttpRequest();
+											}
+											else
+											{
+												// IE6, IE5 浏览器执行代码
+												xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+											}
+											xmlhttp.onreadystatechange=function()
+											{
+												if (xmlhttp.readyState==4 && xmlhttp.status==200)
+												{
+													document.getElementById("c1").innerHTML=xmlhttp.responseText;
+												}
+												else{
+													document.getElementById("c1").innerHTML="服务无响应";
+												}
 										
-										//     1.url   2.成功后的回调函数
-										$.get("AddMessage",{friendname:'${user.molename}'},function(data){
-											//从后台拿到最新数据
-											var c1 = document.getElementById("c1")
-											c1.innerHTML = data;
-											
-										});
-									}
-									</script>
+											}
+											xmlhttp.open("POST","/AddMessage",false);
+											xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+											xmlhttp.send("friendname=<%= user.molename %>&message=请求加你为好友");
+											// xmlhttp.send("name=smyhvae&age=27");
+										}
+										</script>
 								</div>
 							</div>
 						</div>
