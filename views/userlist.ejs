@@ -50,8 +50,12 @@
 											<td><%=userlist[i].region%></td>
 											<td><a type="button" class="btn btn-success"
 												href="userinfo?molename=<%=userlist[i].molename%>">详情</a></td>
-											<td><button type="button" class="btn btn-primary"
-												id="btn<%=i%>" onclick="AddMessage<%=i%>()">加为好友</button> </td>
+											<%  if (userlist[i].molename!=user.molename) { %> 
+											<td>
+												<button type="button" class="btn btn-primary"
+												id="btn<%=i%>" onclick="AddMessage<%=i%>()">加为好友</button> 
+											</td>
+											<% } %>
 												<script>
 													function AddMessage<%=i%>(){
 														var xmlhttp;

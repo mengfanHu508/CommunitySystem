@@ -39,40 +39,8 @@
 													</td>
 													
 													<td>
-													<a type="button" class="btn btn-success" id = "btn1<%=i%>" onclick = "AddFriend<%=i%>()">接受</a>
-													<script>
-														function AddFriend<%=i%>(){
-															var xmlhttp;
-															if (window.XMLHttpRequest)
-															{
-																//  IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
-																xmlhttp=new XMLHttpRequest();
-															}
-															else
-															{
-																// IE6, IE5 浏览器执行代码
-																xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-															}
-															xmlhttp.onreadystatechange=function()
-															{
-																if (xmlhttp.readyState==4 && xmlhttp.status==200)
-																{
-																	document.getElementById("c1<%=i%>").innerHTML=xmlhttp.responseText;
-																}
-																else{
-																	document.getElementById("c1<%=i%>").innerHTML="服务无响应";
-																}
-														
-															}
-															xmlhttp.open("POST","/AddFriend",false);
-															xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-															xmlhttp.send("molename=<%=user.molename%>&friendname=<%=messagelist[i].friendname%>");
-															// xmlhttp.send("name=smyhvae&age=27");
-														}
-														</script>
-													
-														
-													
+													<a type="button" class="btn btn-success" id = "btn1<%=i%>" href = "/AddFriend?molename=<%=user.molename%>&friendname=<%=messagelist[i].friendname%>">接受</a>
+												
 													<a type="button" class="btn btn-danger" id = "btn2<%=i%> " href = "/DeleteMessageFriend?molename=<%=user.molename%>&friendname=<%=messagelist[i].friendname%>">删除信息</a>
 												
 													</td>	

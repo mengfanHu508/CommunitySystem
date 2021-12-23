@@ -24,25 +24,27 @@
 								</thead>
 								<tbody>
 									<% for(var i = 0; i < friendlist.length; i++) { %>
-										<tr>
-											<td>
-												<img src="upload/<%=friendlist[i].user[0].headimg%> " height=75px>
-											</td>
-											<%  if (friendlist[i].user[0].vip==2) { %> 
-												<td><%=friendlist[i].friendname%> <span class="badge badge-danger">超级VIP</span></td>
-											<% } %>
-											<%  if (friendlist[i].user[0].vip==1) { %> 
-												<td><%=friendlist[i].friendname%> <span class="badge badge-danger">VIP</span></td>
-											<% } %>
-											<%  if (!friendlist[i].user[0].vip) { %> 
-												<td><%=friendlist[i].friendname%></td>
-											<% } %>
-											<td><a type="button" class="btn btn-success"
-												href="userInfo?molename=<%=friendlist[i].friendname%>">详细信息</a>
-											<a type="button" class="btn btn-primary" href="chartList?friendname=<%=friendlist[i].friendname%>">私聊</a>
-											<a type="button" class="btn btn-danger"
-												href="deleteFriend?friendname=<%=friendlist[i].friendname%>">删除好友</a></td>
-										</tr>
+										<%  if (friendlist[i].molename==user.molename) { %> 
+											<tr>
+												<td>
+													<img src="upload/<%=friendlist[i].user[0].headimg%> " height=75px>
+												</td>
+												<%  if (friendlist[i].user[0].vip==2) { %> 
+													<td><%=friendlist[i].friendname%> <span class="badge badge-danger">超级VIP</span></td>
+												<% } %>
+												<%  if (friendlist[i].user[0].vip==1) { %> 
+													<td><%=friendlist[i].friendname%> <span class="badge badge-danger">VIP</span></td>
+												<% } %>
+												<%  if (!friendlist[i].user[0].vip) { %> 
+													<td><%=friendlist[i].friendname%></td>
+												<% } %>
+												<td><a type="button" class="btn btn-success"
+													href="userInfo?molename=<%=friendlist[i].friendname%>">详细信息</a>
+												<a type="button" class="btn btn-primary" href="chartList?friendname=<%=friendlist[i].friendname%>">私聊</a>
+												<a type="button" class="btn btn-danger"
+													href="deleteFriend?friendname=<%=friendlist[i].friendname%>">删除好友</a></td>
+											</tr>
+										<% } %>
 									<% } %>
 								</tbody>
 							</table>

@@ -34,7 +34,9 @@
 									<p>
 										<span style="color:red" id="c1"></span>
 									</p>
+									<%  if (self.molename!=user.molename) { %> 
 									<a type="button" class="btn btn-primary" id="btn1" onclick="AddMessage()">加为好友</a>
+									<% } %> 
 									<script>
 										function AddMessage(){
 											var xmlhttp;

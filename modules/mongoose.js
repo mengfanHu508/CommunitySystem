@@ -41,7 +41,7 @@ function InsertPlant(plantname, rarity, cost, saleprice, growtime, access ,photo
 }
 
 //向消息表插入数据
-function InsertMessage(molename, friendname, message, sendtime) {
+function InsertMessage(molename, friendname, message, sendtime,callback) {
     var message = new Message({
         molename: molename,
         friendname: friendname,
@@ -50,17 +50,21 @@ function InsertMessage(molename, friendname, message, sendtime) {
     })
     message.save((err) => {
         if(err) return console.log(err)
+        if(callback){callback()}
         console.log("插入message成功")
     })
 }
 
-function DeleteMessage(molename, friendname) {
+
+function DeleteMessage(molename, friendname ,callback) {
     Message.findOneAndRemove({"molename":molename,"friendname":friendname}, (err, data) => {
         if(err) {
+            if(callback){callback()}
             console.log("删除信息失败")  
             console.log(err)
             return
         }
+        if(callback){callback()}
         console.log("删除信息成功")  
     })
 }
