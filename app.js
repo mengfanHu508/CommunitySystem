@@ -94,11 +94,14 @@ app.post('/LoginAction',(req, res,next)=>{
         })
         else {
             req.session.user = user
+            var most = 0
             Mongoose.User.find({},function(err,userlist){
                 if(err) return console.log(err)
-                req.session.page = 1
-                var most = Mongoose.calMostPage(userlist.length)
-                req.session.mostPage = most
+                most = Mongoose.calMostUserPage(userlist.length)
+            })
+
+            Mongoose.User.find({},function(err,userlist){
+                if(err) return console.log(err)
                 res.render("userlist.ejs", {
                     info: "登陆成功！",
                     user:user,
@@ -107,7 +110,7 @@ app.post('/LoginAction',(req, res,next)=>{
                     mostPage: most
                 })
                 next();
-            })
+            }).limit(5)
         }
     })
     
@@ -207,7 +210,6 @@ app.get('/chartList',(req, res)=>{
                     return it.sendtime
                 })
                 messagelistSum = messagelistSum.splice(messagelistSum.length-5,messagelistSum.length)
-                console.log(messagelistSum)
                 res.render('messagesend.ejs', {
                     user:user,
                     friend:friend,
@@ -232,6 +234,7 @@ app.get('/messagesend.ejs',(req, res)=>{
                 messagelistSum = _.sortBy(messagelistSum, function(it) {
                     return it.sendtime
                 })
+                messagelistSum = messagelistSum.splice(messagelistSum.length-5,messagelistSum.length)
                 res.render('messagesend.ejs', {
                     user:user,
                     friend:friend,
@@ -288,6 +291,7 @@ app.post('/MessageSend',(req, res)=>{
                     messagelistSum = _.sortBy(messagelistSum, function(it) {
                         return it.sendtime
                     })
+                    messagelistSum = messagelistSum.splice(messagelistSum.length-5,messagelistSum.length)
                     res.render('messagesend.ejs', {
                         user:user,
                         friend:friend,
@@ -319,6 +323,7 @@ app.get('/deleteChart',(req, res)=>{
                     messagelistSum = _.sortBy(messagelistSum, function(it) {
                         return it.sendtime
                     })
+                    messagelistSum = messagelistSum.splice(messagelistSum.length-5,messagelistSum.length)
                     res.render('messagesend.ejs', {
                         user:user,
                         friend:friend,
@@ -437,6 +442,7 @@ app.get('/deleteFriend',(req, res)=>{
 //好友列表页面(连表查询)
 app.get('/friendlist.ejs',(req, res)=>{
     var user = req.session.user
+    
     Mongoose.Friend.aggregate([
         {
             $lookup:{
@@ -517,38 +523,51 @@ app.get('/userinfo',(req, res)=>{
 //用户列表页面
 app.get('/userlist.ejs',(req, res)=>{
     var user = req.session.user
+    var suburl = req.url.split('?')[1];
+    var key = suburl.split('&');
+    var page = key[0].split('=')[1];
+    var most = 0
     Mongoose.User.find({},function(err,userlist){
         if(err) return console.log(err)
-        req.session.page = 1
-        var most = Mongoose.calMostPage(userlist.length)
-        req.session.mostPage = most
+        most = Mongoose.calMostUserPage(userlist.length)
+    })
+
+    Mongoose.User.find({},function(err,userlist){
+        if(err) return console.log(err)
         res.render("userlist.ejs", {
             info: "登陆成功！",
             user:user,
             userlist:userlist,
-            page:1,
+            page:page,
             mostPage: most
         })
-    })
+    }).limit(5).skip((page-1)*5)
 })
 
 //植物图鉴页面
 app.get('/plant.ejs',(req, res)=>{
     var user = req.session.user
+    var suburl = req.url.split('?')[1];
+    var key = suburl.split('&');
+    var page = key[0].split('=')[1];
+    var most = 0
     Mongoose.Plant.find({},function(err,plantlist){
         if(err) return console.log(err)
-        req.session.page = 1
-        var most = Mongoose.calMostPage(plantlist.length)
-        req.session.mostPage = most
+        most = Mongoose.calMostPage(plantlist.length)
+    })
+    
+    Mongoose.Plant.find({},function(err,plantlist){
+        if(err) return console.log(err)
         res.render("plant.ejs", {
             info:null,
             user:user,
             plantlist:plantlist,
-            page:1,
+            page:page,
             mostPage: most
         })
-    })
+    }).limit(8).skip((page-1)*8)
 })
+
 
 //植物信息页面
 app.get('/PlantInfo',(req, res)=>{
@@ -571,7 +590,7 @@ app.get('/addplant.ejs', (req, res)=>{
     var user = req.session.user
     Mongoose.User.findOne({"molename": user.molename}).exec((err, user) => {
         if(err) return console.log(err)
-        if(user.status){
+        if(user.manager){
             res.render('addplant.ejs', {
                 user:user,
                 info:null
@@ -596,21 +615,34 @@ app.post('/AddPlant', upload.single('photo'), (req, res) => {
     var access = req.body.access
     var rarity = req.body.rarity
     var photo = req.file.filename
-    Mongoose.InsertPlant(plantname, rarity, cost, saleprice, growtime, access ,photo)
-    
-    Mongoose.Plant.find({},function(err,plantlist){
-        if(err) return console.log(err)
-        req.session.page = 1
-        var most = Mongoose.calMostPage(plantlist.length)
-        req.session.mostPage = most
-        res.render("plant.ejs", {
-            info:"添加成功！",
-            user:user,
-            plantlist:plantlist,
-            page:1,
-            mostPage: most
-        })
+    Mongoose.Plant.findOne({"plantname":plantname}).exec((err,plant)=>{
+        if(!plant){
+            Mongoose.InsertPlant(plantname, rarity, cost, saleprice, growtime, access ,photo,list)
+
+            function list(){
+                Mongoose.Plant.find({},function(err,plantlist){
+                    if(err) return console.log(err)
+                    req.session.page = 1
+                    var most = Mongoose.calMostPage(plantlist.length)
+                    req.session.mostPage = most
+                    res.render("plant.ejs", {
+                        info:"添加成功！",
+                        user:user,
+                        plantlist:plantlist,
+                        page:1,
+                        mostPage: most
+                    })
+                })
+            }
+        }
+        else{
+            res.render('addplant.ejs', {
+                user:user,
+                info:"该植物已经加入过图鉴！"
+            })
+        }
     })
+    
 })
     
 

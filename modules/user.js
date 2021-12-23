@@ -10,7 +10,6 @@ const UserSchema = {
     regtime: String,
     headimg: String,
     manager: Number,
-    status: Number,
     vip:Number
 }
 

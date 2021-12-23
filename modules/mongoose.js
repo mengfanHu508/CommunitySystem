@@ -32,7 +32,7 @@ function setPwd(molename, password) {
 }
 
 //向植物表插入数据
-function InsertPlant(plantname, rarity, cost, saleprice, growtime, access ,photo) {
+function InsertPlant(plantname, rarity, cost, saleprice, growtime, access ,photo,callback) {
     var plant = new Plant({
         plantname: plantname,
         rarity: rarity,
@@ -44,6 +44,7 @@ function InsertPlant(plantname, rarity, cost, saleprice, growtime, access ,photo
     })
     plant.save((err) => {
         if(err) return console.log(err)
+        if(callback){callback()}
         console.log("插入plant成功")
     })
 }
@@ -130,12 +131,22 @@ function GetChartTime() {
 
 function calMostPage(sum) {
     var most = 0
-    while(sum > 10) {
-        sum -= 10
+    while(sum > 8) {
+        sum -= 8
         most++
     }
     if(sum > 0) most++
     return most
 }
 
-module.exports = {User, Friend,Plant,Message, InsertUser, InsertFriend,DeleteFriend,InsertMessage,DeleteMessage,InsertPlant,ChangeStatus,setPwd, GetRegTime, GetChartTime, calMostPage}
+function calMostUserPage(sum) {
+    var most = 0
+    while(sum > 5) {
+        sum -= 5
+        most++
+    }
+    if(sum > 0) most++
+    return most
+}
+
+module.exports = {User, Friend,Plant,Message, InsertUser, InsertFriend,DeleteFriend,InsertMessage,DeleteMessage,InsertPlant,ChangeStatus,setPwd, GetRegTime, GetChartTime, calMostPage,calMostUserPage}

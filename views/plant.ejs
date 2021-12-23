@@ -17,7 +17,7 @@
 							<div class="card">
 								<img class="card-img-top" src="upload/<%=plantlist[i].photo%>" height=150px width=150px alt="Card image cap">
 								<div class="card-body">
-									<h5 class="card-title"><%=plantlist[i].name%></h5>
+									<h5 class="card-title"><%=plantlist[i].plantname%></h5>
 									<a href="PlantInfo?plantname=<%=plantlist[i].plantname%>">查看详细信息</a>
 								</div>
 							</div>
@@ -34,27 +34,16 @@
 				</div>	
 				<nav aria-label="Page navigation example" style="margin-top: 20px">
 						<ul class="pagination justify-content-center">
-							<c:if test="${page==1}">
-								<li class="page-item disabled"><a class="page-link"
-									href="#"> 上一页</a></li>
-							</c:if>
-							<c:if test="${page!=1}">
-								<li class="page-item"><a class="page-link"
-									href="AllPlant?page=${page-1}"> 上一页</a></li>
-
-							</c:if>
-							<li class="page-item"><a class="page-link"
-								href="AllPlant?page=${page}"> ${page}</a></li>
-							<c:if test="${page!=mostpage}">
-								<li class="page-item"><a class="page-link"
-									href="AllPlant?page=${page+1}"> 下一页</a></li>
-							</c:if>
-							<c:if test="${page==mostpage}">
-								<li class="page-item disabled"><a class="page-link"
-									href="#"> 下一页</a></li>
-
-							</c:if>
+							<% if(page > 1) { %>
+								<li class="page-item"><a class="page-link" href="plant.ejs?page=<%= Number(page) - 1%>">上一页</a></li>
+								<% } %>
+								<li class="page-item"><a class="page-link" href="#bottom"><%=page%></a></li>
+								<% if(page < mostPage) { %>
+								<li class="page-item"><a class="page-link" href="plant.ejs?page=<%= Number(page) + 1 %>">下一页</a></li>
+							<% } %>
+							<% if(user.manager == 1) { %>
 							<a type="button" class="btn btn-primary" href="addplant.ejs">添加图鉴</a>
+							<% } %>
 							<p style="color: red"><%= info %></p>
 						</ul>
 						
