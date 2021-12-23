@@ -23,6 +23,14 @@ function InsertUser(molename, password, sex, birth,region, spec, regtime, headim
     })
 }
 
+//修改密码
+function setPwd(molename, password) {
+    User.updateOne({"molename":molename},{"password":password},(err) => {
+        if(err) return console.log(err)
+        console.log("修改密码成功！")
+    })
+}
+
 //向植物表插入数据
 function InsertPlant(plantname, rarity, cost, saleprice, growtime, access ,photo) {
     var plant = new Plant({
@@ -57,7 +65,7 @@ function InsertMessage(molename, friendname, message, sendtime,callback) {
 
 
 function DeleteMessage(molename, friendname ,callback) {
-    Message.findOneAndRemove({"molename":molename,"friendname":friendname}, (err, data) => {
+    Message.deleteMany({"molename":molename,"friendname":friendname}, (err, data) => {
         if(err) {
             if(callback){callback()}
             console.log("删除信息失败")  
@@ -70,25 +78,30 @@ function DeleteMessage(molename, friendname ,callback) {
 }
 
 //向好友表插入数据
-function InsertFriend(molename, friendname) {
+function InsertFriend(molename, friendname,callback) {
     var friend = new Friend({
         molename: molename,
         friendname: friendname,
     })
     friend.save((err) => {
         if(err) return console.log(err)
+        if(callback){callback()}
         console.log("插入friend成功")
     })
 }
 
 
-function DeleteFriend(molename, friendname) {
+function DeleteFriend(molename, friendname,callback) {
+    
     Friend.findOneAndRemove({"molename":molename,"friendname":friendname}, (err, data) => {
         if(err) {
+            if(callback){callback()}
             console.log("删除好友失败")  
             console.log(err)
             return
         }
+        DeleteMessage(molename, friendname)
+        if(callback){callback()}
         console.log("删除好友成功")  
     })
 }
@@ -125,4 +138,4 @@ function calMostPage(sum) {
     return most
 }
 
-module.exports = {User, Friend,Plant,Message, InsertUser, InsertFriend,DeleteFriend,InsertMessage,DeleteMessage,InsertPlant,ChangeStatus, GetRegTime, GetChartTime, calMostPage}
+module.exports = {User, Friend,Plant,Message, InsertUser, InsertFriend,DeleteFriend,InsertMessage,DeleteMessage,InsertPlant,ChangeStatus,setPwd, GetRegTime, GetChartTime, calMostPage}
