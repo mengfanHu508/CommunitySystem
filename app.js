@@ -1,5 +1,3 @@
-const http = require('http');
-const fs = require('fs');
 const ejs = require('ejs');
 const Mongoose = require('./modules/mongoose.js');
 const express = require('express');
@@ -118,7 +116,6 @@ app.post('/LoginAction',(req, res,next)=>{
 
 //用户注册
 app.post('/RegAction', upload.single('headimg'), (req, res, next) => {
-// app.post('/RegAction', (req, res,next) => {
     var molename = req.body.molename
     var password = req.body.password
     var sex = req.body.sex
@@ -205,7 +202,7 @@ app.get('/chartList',(req, res)=>{
             if(err) return console.log(err)
             Mongoose.Message.find({"molename": friendname,"friendname":user.molename}).exec((err, messagelist2) => {
                 if(err) return console.log(err)
-                messagelistSum = messagelist.concat(messagelist2)
+                messagelistSum = messagelist.concat(messagelist2)   //将俩人记录合并并按时间排序
                 messagelistSum = _.sortBy(messagelistSum, function(it) {
                     return it.sendtime
                 })
@@ -230,7 +227,7 @@ app.get('/messagesend.ejs',(req, res)=>{
             if(err) return console.log(err)
             Mongoose.Message.find({"molename": friendname,"friendname":user.molename}).exec((err, messagelist2) => {
                 if(err) return console.log(err)
-                messagelistSum = messagelist.concat(messagelist2)
+                messagelistSum = messagelist.concat(messagelist2)   //将俩人记录合并并按时间排序
                 messagelistSum = _.sortBy(messagelistSum, function(it) {
                     return it.sendtime
                 })
@@ -287,7 +284,7 @@ app.post('/MessageSend',(req, res)=>{
                 if(err) return console.log(err)
                 Mongoose.Message.find({"molename": friendname,"friendname":user.molename}).exec((err, messagelist2) => {
                     if(err) return console.log(err)
-                    messagelistSum = messagelist.concat(messagelist2)
+                    messagelistSum = messagelist.concat(messagelist2)   //将俩人记录合并并按时间排序
                     messagelistSum = _.sortBy(messagelistSum, function(it) {
                         return it.sendtime
                     })
@@ -319,7 +316,7 @@ app.get('/deleteChart',(req, res)=>{
                 if(err) return console.log(err)
                 Mongoose.Message.find({"molename": friendname,"friendname":user.molename}).exec((err, messagelist2) => {
                     if(err) return console.log(err)
-                    messagelistSum = messagelist.concat(messagelist2)
+                    messagelistSum = messagelist.concat(messagelist2)   //将俩人记录合并并按时间排序
                     messagelistSum = _.sortBy(messagelistSum, function(it) {
                         return it.sendtime
                     })
@@ -342,7 +339,7 @@ app.get('/AddFriend',(req, res)=>{
     var suburl = req.url.split('?')[1];
     var key = suburl.split('&');
     var molename = key[0].split('=')[1];
-    var friendname = key[1].split('=')[1];
+    var friendname = key[1].split('=')[1];      //获取url中的用户用户名和好友用户名
     Mongoose.InsertFriend(molename, friendname)
     Mongoose.InsertFriend(friendname, molename)
     Mongoose.DeleteMessage(molename,friendname,list)
@@ -359,7 +356,7 @@ app.get('/AddFriend',(req, res)=>{
             }
         ],function(err,messagelist){
             if(err)  return console.log(err)
-            req.session.mostPage = Mongoose.calMostPage(messagelist.length)
+            req.session.mostPage = Mongoose.calMostPage(messagelist.length) //计算总数，算出最大分页数
             req.session.messagelist = messagelist
             res.render('mymessage.ejs', {
                 user:user,
@@ -382,7 +379,7 @@ app.get('/DeleteMessageFriend',(req, res)=>{
     Mongoose.DeleteMessage(molename,friendname,list)
 
     function list(){
-        Mongoose.Message.aggregate([
+        Mongoose.Message.aggregate([    //聚合查询，找到好友和好友的详细信息
             {
                 $lookup:{
                     from:"users",
@@ -393,7 +390,7 @@ app.get('/DeleteMessageFriend',(req, res)=>{
             }
         ],function(err,messagelist){
             if(err)  return console.log(err)
-            req.session.mostPage = Mongoose.calMostPage(messagelist.length)
+            req.session.mostPage = Mongoose.calMostPage(messagelist.length) //计算总数，算出最大分页数
             req.session.messagelist = messagelist
             res.render('mymessage.ejs', {
                 user:user,
@@ -410,10 +407,10 @@ app.get('/deleteFriend',(req, res)=>{
     var user = req.session.user
     var suburl = req.url.split('?')[1];
     var key = suburl.split('&');
-    var friendname = key[0].split('=')[1];
-    Mongoose.DeleteFriend(user.molename,friendname,list)
+    var friendname = key[0].split('=')[1]; //获取url中的好友用户名
+    Mongoose.DeleteFriend(user.molename,friendname,list) //删除好友
     function list(){
-        Mongoose.Friend.aggregate([
+        Mongoose.Friend.aggregate([ //聚合查询，找到好友和好友的详细信息
             {
                 $lookup:{
                     from:"users",
@@ -427,7 +424,7 @@ app.get('/deleteFriend',(req, res)=>{
             }
         ],function(err,friendlist){
             if(err)  return console.log(err)
-            req.session.mostPage = Mongoose.calMostPage(friendlist.length)
+            req.session.mostPage = Mongoose.calMostPage(friendlist.length) //计算总数，算出最大分页数
             req.session.friendlist = friendlist
             res.render("friendlist.ejs", {
                 user: user,
@@ -443,7 +440,7 @@ app.get('/deleteFriend',(req, res)=>{
 app.get('/friendlist.ejs',(req, res)=>{
     var user = req.session.user
     
-    Mongoose.Friend.aggregate([
+    Mongoose.Friend.aggregate([ //聚合查询，找到好友和好友的详细信息
         {
             $lookup:{
                 from:"users",
@@ -457,7 +454,7 @@ app.get('/friendlist.ejs',(req, res)=>{
         }
     ],function(err,friendlist){
         if(err)  return console.log(err)
-        req.session.mostPage = Mongoose.calMostPage(friendlist.length)
+        req.session.mostPage = Mongoose.calMostPage(friendlist.length) //计算总数，算出最大分页数
         req.session.friendlist = friendlist
         res.render("friendlist.ejs", {
             user: user,
@@ -469,44 +466,13 @@ app.get('/friendlist.ejs',(req, res)=>{
 
 })
 
-//删除好友
-app.post('/deleteFriend',(req, res)=>{
-    var user = req.session.user
-    var suburl = req.url.split('?')[1];
-    var key = suburl.split('&');
-    var friendname = key[0].split('=')[1];
-    Mongoose.DeleteFriend(user.molename,friendname)
-    Mongoose.Friend.aggregate([
-        {
-            $lookup:{
-                from:"users",
-                localField:"friendname",
-                foreignField:"molename",
-                as:"user"
-            }
-        },
-        {
-            $sort: {"time":-1}
-        }
-    ],function(err,friendlist){
-        if(err)  return console.log(err)
-        req.session.mostPage = Mongoose.calMostPage(friendlist.length)
-        req.session.friendlist = friendlist
-        res.render("friendlist.ejs", {
-            user: user,
-            friendlist: friendlist,
-            page: req.session.page,
-            mostPage:req.session.mostPage,
-        })
-    })
-})
 
 //用户信息页面
 app.get('/userinfo',(req, res)=>{
     var self = req.session.user
-    if(req.url == '/userinfo'){
+    if(req.url == '/userinfo'){ //url中没有传值则为查看本用户
         molename=self.molename
-    }else{
+    }else{                      //url中有传值则为查看其他用户
         var suburl = req.url.split('?')[1];
         var key = suburl.split('&');
         var molename = key[0].split('=')[1];
@@ -541,7 +507,7 @@ app.get('/userlist.ejs',(req, res)=>{
             page:page,
             mostPage: most
         })
-    }).limit(5).skip((page-1)*5)
+    }).limit(5).skip((page-1)*5)    //分页查询，每页显示五个
 })
 
 //植物图鉴页面
@@ -565,7 +531,7 @@ app.get('/plant.ejs',(req, res)=>{
             page:page,
             mostPage: most
         })
-    }).limit(8).skip((page-1)*8)
+    }).limit(8).skip((page-1)*8) //分页查询，每页显示八个
 })
 
 
@@ -692,7 +658,7 @@ app.post('/SetPwd',(req, res)=>{
     var user = req.session.user
     var password = req.body.password;
     var newpassword = req.body.newpassword;
-    if(password == newpassword){
+    if(password == newpassword){    //判断就密码新密码是否一致
         Mongoose.setPwd(user.molename,password)
             res.render("setpwd.ejs", {
                 user:user,
