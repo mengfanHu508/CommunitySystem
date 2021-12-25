@@ -62,17 +62,8 @@
 								<li class="page-item disabled"><a class="page-link"
 									href="#"> 上一页</a></li>
 							</c:if>
-							<c:if test="${page!=1}">
-								<li class="page-item"><a class="page-link"
-									href="MyMessage?page=${page-1}"> 上一页</a></li>
-
-							</c:if>
 							<li class="page-item"><a class="page-link"
-								href="MyMessage?page=${page}"> 1</a></li>
-							<c:if test="${page!=mostpage}">
-								<li class="page-item"><a class="page-link"
-									href="MyMessage?page=${page+1}"> 下一页</a></li>
-							</c:if>
+								href="#"> 1</a></li>
 							<c:if test="${page==mostpage}">
 								<li class="page-item disabled"><a class="page-link"
 									href="#"> 下一页</a></li>
