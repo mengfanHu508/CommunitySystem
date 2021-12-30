@@ -93,7 +93,7 @@ friends:好友表
 
 ## 三、引入的包说明
 
-![image-20211223215956863](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211223215956863.png)
+![image](https://user-images.githubusercontent.com/77476993/147737339-da772fbc-e8e6-49f0-a1cf-666880ac7f2c.png)
 
 1. ejs：使用ejs渲染页面（如<%= data %>）
 
@@ -105,17 +105,19 @@ friends:好友表
 
 5. path：用来获得文件的扩展名等
 
-6. multer：上传文件![image-20211223220703130](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211223220703130.png)
+6. multer：上传文件
+7. ![image](https://user-images.githubusercontent.com/77476993/147737373-c4343653-895b-490c-b16a-8f185aacb971.png)
 
 7. bodyParser：处理前端 Post 提交的数据
 
-8. lodash：给 list 按某一个属性排序![image-20211223221012996](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211223221012996.png)
+8. lodash：给 list 按某一个属性排序
+9. ![image](https://user-images.githubusercontent.com/77476993/147737381-878102a8-d76a-492f-9974-2f019ea1b7d4.png)
 
    
 
 ## 四、项目目录结构和各个部分的说明
 
-![image-20211223221818892](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211223221818892.png)
+![image](https://user-images.githubusercontent.com/77476993/147737414-13da372d-3aee-42e3-827d-3e25d4788ec0.png)
 
 1. modules：mongodb的连接，CURD，实体类
 2. node_modules：存放导入的包
@@ -127,52 +129,50 @@ friends:好友表
 
 
 ## 五、使用说明书
-
-![image-20211225135455685](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225135455685.png)
+![image](https://user-images.githubusercontent.com/77476993/147737422-a4181ef4-2f47-431b-8e8e-8e46b4068660.png)
 
 首页：简要介绍了本项目的功能，点击去登陆跳转到登录页面
 
-![image-20211225135539340](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225135539340.png)
+![image](https://user-images.githubusercontent.com/77476993/147737433-e00bb570-247e-4580-91b5-39ff41434bdb.png)
 
 登录页面：如果已经有账号可以输入账号密码进行登录，没有可以点击注册进行账户注册
 
 如果账号密码登录失败会提示账户密码错误！
 
-![image-20211225135645651](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225135645651.png)
+![image](https://user-images.githubusercontent.com/77476993/147737443-7af993f2-c831-40df-88a2-6a786eb57db8.png)
 
 注册页面：用户输入对应信息以及上传用户头像即可完成注册（用户名不能重复，如果用户名已经被注册会出现提示）
 
 注册完回跳转回登录页面进行登录
 
-![image-20211225140522116](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225140522116.png)
+![image](https://user-images.githubusercontent.com/77476993/147737448-1fe29608-6c49-40b7-bf23-7b43cb103059.png)
 
  用户列表页面：登录成功后进入用户列表页面，这里显示除自己以外的所有注册用户，在此界面可以查看任何一个人的详细资料。
 
-![image-20211225141206647](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225141206647.png)
+![image](https://user-images.githubusercontent.com/77476993/147737455-e24966ee-5abd-494d-8544-897c6e38b1a7.png)
 
 还可以加他们为好友（使用 Ajax 局部刷新，只是想他们发出加好友请求，真正加好友需要对方的同意）。这里VIP会有属于自己的红标。
 
-![image-20211225141050898](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225141050898.png)
+![image](https://user-images.githubusercontent.com/77476993/147737462-ebb345c1-8161-454e-abeb-69c25d8bdd41.png)
 
 植物图鉴界面：在此界面会展示所有已经加入数据库的植物图片以及名称，点击查看详细可以查看植物的详细信息，具有分页的功能，每页八个。
-
-![image-20211225140709557](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225140709557.png)
+![image](https://user-images.githubusercontent.com/77476993/147737483-a0df8424-986a-47f6-8c37-98a12ce8ed73.png)
 
 如果是管理员可以对图鉴进行增加，不是管理员则会提示不能添加。
 
-![image-20211225142204120](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225142204120.png)
+![image](https://user-images.githubusercontent.com/77476993/147737494-4267d912-4bbd-425b-8269-f5f909d778a2.png)
 
  我的消息界面：此界面会显示所有请求加为好友的信息，不会有重复，用户可以接受好友请求或者拒绝好友请求，接受或拒绝都会删除请求加为好友的信息并刷新页面。
 
-![image-20211225142756074](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225142756074.png)
+![image](https://user-images.githubusercontent.com/77476993/147737503-efcf1d5d-4da4-49cd-b6cf-a382a0eeb68b.png)
 
 我的好友界面：此界面会展示所有用户已经通过的好友请求真正成为好友的用户，在此可以查看他们的个人信息，删除好友，点击“私聊”会跳转到私聊界面
 
-![image-20211225143128003](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225143128003.png)
+![image](https://user-images.githubusercontent.com/77476993/147737511-74c4dc28-baae-479c-9f2a-838561eb61bb.png)
 
 私聊界面：在此见面可以对好友私聊，自己发的信息在右边，好友发的信息在左边，并按时间排序，在下方输入框输入内容点击发送即可发送消息，记录只查看最近五条，可以删除聊天记录。
 
-![image-20211225140451593](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225140451593.png)
+![image](https://user-images.githubusercontent.com/77476993/147737521-c76f5934-4b8e-41ab-865e-ebade28647e7.png)
 
 VIP界面，点击我的会员进如VIP界面，点击”穷比买不起“会跳转到，点击"整个好活？"成为VIP，点击“冲冲冲！”成为高级VIP（暂时没有实现支付宝付款）
 
@@ -183,9 +183,6 @@ VIP界面，点击我的会员进如VIP界面，点击”穷比买不起“会�
 
 
 ## 六、开发日记
-
-![image-20211225143456670](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211225143456670.png)
-
-![image-20211223223615237](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211223223615237.png)
-
-![image-20211223223747550](C:\Users\legion\AppData\Roaming\Typora\typora-user-images\image-20211223223747550.png)
+![image](https://user-images.githubusercontent.com/77476993/147737541-d155116a-7be1-4709-bed2-ff1ede70756c.png)
+![image](https://user-images.githubusercontent.com/77476993/147737550-4b7b72d8-5086-4a60-be23-5e00ab064ce0.png)
+![image](https://user-images.githubusercontent.com/77476993/147737558-f4dde3b1-08a1-435f-bba4-cb8133f93bb8.png)
